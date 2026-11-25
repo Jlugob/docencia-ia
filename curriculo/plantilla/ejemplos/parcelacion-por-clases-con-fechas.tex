@@ -1,0 +1,98 @@
+% EJEMPLO de parcelación POR CLASES CON FECHAS: el piloto de Filosofía 10.° (P4) impreso con fechas de
+% prueba (semana 1 = 13 sep 2027; clases lunes y jueves), un receso y un festivo (lunes 18 oct 2027,
+% Día de la Raza trasladado por la Ley Emiliani).
+% 8 semanas × 2 clases por semana = 16 clases. Sin fechas (reutilizable): para imprimir con fechas,
+% \fechainicio{AAAA-MM-DD} (lunes de la semana 1) y \diasclase{lun,jue} en el preámbulo.
+% Festivos o eventos: \festivo{motivo} en el lugar de la clase que se pierde.
+% Los códigos [D1]… remiten a los desempeños de malla-P4.tex (FIL-10-P4-D1…).
+% Compilar: bash curriculo/plantilla/compilar.sh curriculo/filosofia/10/parcelacion-P4.tex
+\documentclass[parcelacion]{planeacion}
+\materia{filosofia}
+\grado{10.°} \periodo{IV} \anio{2027}
+\clasesporsemana{2}
+\fechainicio{2027-09-13}
+\diasclase{lun,jue}
+\begin{document}
+\begin{parcelacion}
+  % ---- Semana 1 · D1 La herencia griega
+  \clase{\textbf{Una larga herencia.} Pregunta problematizadora del periodo; Platón y
+    Aristóteles.}
+    {Lectura de \emph{La escuela de Atenas}: qué señala cada filósofo y por qué. Lluvia de
+     preguntas sobre fe y razón.}
+    {Reproducción de la obra de Rafael; presentación.}
+    {Participación; registro de preguntas en el cuaderno. {\scriptsize[D1]}}
+  \clase{\textbf{¿Cómo llegó Aristóteles a la Edad Media?} Neoplatónicos, traducciones del árabe y
+    del griego, Toledo, Averroes.}
+    {En grupos, línea de tiempo de Platón a Tomás con las distancias entre autores.}
+    {Papel para la línea de tiempo; texto guía.}
+    {Revisión de la línea de tiempo (coevaluación). {\scriptsize[D1]}}
+  % ---- Semana 2 · D2 San Agustín
+  \clase{\textbf{San Agustín: la interioridad.} \emph{Confesiones} I, 1; «vuelve a ti mismo».}
+    {Lectura guiada de fragmentos e identificación de la tesis de cada uno.}
+    {Fragmentos de Agustín con referencia.}
+    {Escrito breve: ¿dónde buscamos la verdad? {\scriptsize[D2]}}
+  \clase{\textbf{Fe y razón.} «Comprende para creer, cree para comprender».}
+    {Conversatorio: ¿se opone la fe a la razón? Posturas, argumentos y contraargumentos.}
+    {Preguntas del conversatorio.}
+    {Participación en el conversatorio. {\scriptsize[D2]}}
+  % ---- Semana 3 · D2 → D3
+  \clase[q]{\textbf{Cierre de Agustín.}}
+    {Quiz de lectura y retroalimentación inmediata.}
+    {Quiz impreso.}
+    {Quiz. {\scriptsize[D2]}}
+  \clase{\textbf{Tomás de Aquino y la universidad medieval.} La recuperación de Aristóteles.}
+    {Exposición dialogada sobre las universidades y la escolástica.}
+    {Presentación; mapa de las primeras universidades.}
+    {Preguntas de comprensión. {\scriptsize[D3]}}
+  % ---- Semana 4 · D3 La quaestio
+  \clase{\textbf{La estructura de un artículo de la \emph{Suma teológica}.}}
+    {Análisis de un artículo para descubrir sus partes: objeciones, «en sentido contrario»,
+     respuesta, solución.}
+    {Artículo de la \emph{Suma teológica} (fragmento con referencia).}
+    {Esquema de la estructura del artículo. {\scriptsize[D3]}}
+  \clase[t]{\textbf{El método de la \emph{quaestio}.}}
+    {Taller en parejas: escribir una \emph{quaestio} sobre un problema actual (p.~ej. «¿Es lícito
+     usar inteligencia artificial en las tareas?»).}
+    {Guía de taller con el modelo de \emph{quaestio}.}
+    {Taller evaluativo con criterios (estructura, objeciones, respuesta). {\scriptsize[D3]}}
+  \receso{RECESO ESCOLAR DE OCTUBRE}
+  \festivo{festivo (Día de la Raza, trasladado al lunes)}
+  % ---- Semana 5 · D4 ¿Edad Oscura?
+  \clase{\textbf{¿Fue «oscura» la Edad Media?} Origen de la etiqueta.}
+    {Preparación del debate: dos grupos reúnen evidencias a favor y en contra.}
+    {Fichas de evidencias (universidades, catedrales, traducciones, epidemias).}
+    {Fichas de evidencias completas. {\scriptsize[D4]}}
+  \clase{\textbf{Debate: ¿Edad Oscura?}}
+    {Debate con evidencias y cierre con reflexión escrita.}
+    {Fichas de evidencias; rúbrica del debate.}
+    {Debate (coevaluación) y reflexión escrita. {\scriptsize[D4]}}
+  % ---- Semana 6 · D4 Renacimiento y humanismo
+  \clase{\textbf{La imprenta y la difusión de las ideas.}}
+    {Lectura de una gráfica sobre la expansión de la imprenta y discusión de sus efectos.}
+    {Gráfica de la difusión de la imprenta.}
+    {Respuestas a preguntas sobre la gráfica. {\scriptsize[D4]}}
+  \clase{\textbf{Humanismo: Erasmo de Rotterdam.} \emph{Elogio de la locura} (1511).}
+    {Lectura de un fragmento de Erasmo; cuadro comparativo escolástica--humanismo.}
+    {Fragmento de Erasmo; formato de cuadro comparativo.}
+    {Cuadro comparativo. {\scriptsize[D4]}}
+  % ---- Semana 7 · D5 Utopía
+  \clase{\textbf{Tomás Moro y la \emph{Utopía} (1516).} Las ovejas que devoran hombres.}
+    {Lectura de fragmentos del libro I y del libro II; qué critica Moro y qué propone.}
+    {Fragmentos de la \emph{Utopía}.}
+    {Preguntas de interpretación. {\scriptsize[D5]}}
+  \clase{\textbf{Proyecto: «Nuestra utopía para el municipio».}}
+    {Trabajo en grupos: una medida concreta para mejorar la comunidad, sus razones y sus
+     posibles riesgos.}
+    {Guía del proyecto.}
+    {Avance del proyecto. {\scriptsize[D5]}}
+  % ---- Semana 8 · Cierre
+  \clase[p]{\textbf{Sustentación de los proyectos.}}
+    {Presentación de cada grupo y preguntas del curso.}
+    {Proyectos de los grupos.}
+    {Sustentación (autoevaluación y coevaluación). {\scriptsize[D5]}}
+  \clase[e]{\textbf{Evaluación de periodo.} De la escolástica a la \emph{Utopía}.}
+    {Evaluación escrita tipo ICFES (selección y preguntas abiertas).}
+    {Evaluación impresa.}
+    {Evaluación de periodo. {\scriptsize[D1--D5]}}
+\end{parcelacion}
+\end{document}

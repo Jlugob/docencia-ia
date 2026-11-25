@@ -1,0 +1,44 @@
+# ============================================================================================
+#  DATOS DEL DOCENTE Y PERFIL PEDAGÓGICO
+#  Claude lo lee antes de cualquier malla, parcelación, taller o evaluación. La plantilla usa la
+#  sección «perfil» para avisar al compilar si una parcelación no cumple el modo de trabajo.
+#  El perfil que viene es el del autor del kit (ver curriculo/MODO-DE-TRABAJO.md): ajústalo al tuyo.
+#  Valores en null = «por confirmar»: Claude los pregunta cuando los necesita, nunca los inventa.
+# ============================================================================================
+
+docente: Nombre del Docente
+anio: 2027
+
+periodos: 4                 # según el SIEE del colegio
+semanas_por_periodo: 8
+minutos_por_hora: 60
+descanso_por_hora: 5        # Colombia: Decreto 1075, art. 2.4.3.1.2, par. 3 (Decreto 277 de 2025)
+
+# Materias que dicta: clave → nombre, grados y clases por semana por grado.
+# Las claves filosofia, tecnologia, etica y emocional ya traen su referente del MEN en la plantilla
+# (columnas y nota aclaratoria). Cualquier otra materia usa las columnas con estándares y DBA.
+materias:
+  filosofia:
+    nombre: Filosofía
+    codigo: FIL
+    grados: [10, 11]
+    clases_por_semana: {10: 2, 11: 2}
+  # matematicas:
+  #   nombre: Matemáticas
+  #   codigo: MAT
+  #   grados: [6, 7]
+  #   clases_por_semana: {6: 5, 7: 5}
+
+# Perfil pedagógico (modo de trabajo). Explicación completa: curriculo/MODO-DE-TRABAJO.md
+perfil:
+  dictado: false                  # explica; los estudiantes toman apuntes y el docente los firma
+  entregable_por_clase: true      # un entregable corto por clase, registrado con sello
+  quices_por_periodo: [1, 1]      # mínimo y máximo
+  talleres_por_periodo: [1, 3]    # mínimo y máximo (no uno por clase)
+  evaluaciones_de_periodo: 1      # evaluación final del periodo
+  duracion_clase_min: 60          # una hora (≈55 min efectivos)
+  actividades_caben_en_una_clase: true
+  actividades_fuera_de_lo_comun: "al menos una por semana, como giro sencillo"
+  hilo_conductor: true            # pregunta del periodo + punto de llegada; clases encadenadas
+  proyectos: "solo si hay un producto auténtico que lo justifique"
+  tiempos_de_la_ia: true          # regla de diseño: evidencia en clase y a mano; IA como objeto de análisis

@@ -1,0 +1,352 @@
+% =====================================================================
+%  evaluacion-extras.sty
+%  Complementos para la clase `evaluacion` (docencia-ia).
+%  No modifica la clase: solo agrega macros y estilos para enriquecer
+%  los contextos (fragmentos citados, retratos, líneas de tiempo,
+%  diálogos, chats, afirmaciones I-II-III, tablas para completar...).
+%
+%  Uso (después de \documentclass):
+%     \usepackage{../plantilla/evaluacion-extras}
+%  Ver la sección "Extras" de evaluaciones/plantilla/README.md.
+% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{evaluacion-extras}[2026/11/13 Extras para la clase evaluacion]
+
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,shapes.misc,
+  shapes.callouts,decorations.pathmorphing,decorations.pathreplacing,fit,backgrounds}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\RequirePackage{tabularx,enumitem,etoolbox}
+
+% Colores auxiliares (derivados del color del colegio "acento")
+\colorlet{ex@gris}{black!62}
+\colorlet{ex@suave}{acento!12}
+
+% ---------------------------------------------------------------------
+% Afirmación y razón (ICFES). Opciones fijas:
+%   A: ambas V y la razón explica · B: ambas V, no explica
+%   C: afirmación V, razón F      · D: afirmación F, razón V
+% ---------------------------------------------------------------------
+\providecommand{\afirmacionrazon}{%
+  \opcioneslargas
+    {La afirmación y la razón son verdaderas, y la razón explica la afirmación.}
+    {La afirmación y la razón son verdaderas, pero la razón NO explica la afirmación.}
+    {La afirmación es verdadera, pero la razón es falsa.}
+    {La afirmación es falsa, pero la razón es verdadera.}}
+% \afirmacion{texto}{razón}  -> enunciado con el formato de la plantilla
+\newcommand{\afirmacion}[2]{%
+  \textbf{Afirmación:} #1, \textbf{PORQUE} \textbf{razón:} #2.}
+
+% ---------------------------------------------------------------------
+% Afirmaciones numeradas con romanos:
+%   \begin{afirmaciones} \item ... \item ... \item ... \end{afirmaciones}
+% ---------------------------------------------------------------------
+\newlist{afirmaciones}{enumerate}{1}
+\setlist[afirmaciones]{label=\Roman*.,leftmargin=2.2em,itemsep=0pt,topsep=2pt,parsep=0pt}
+
+% ---------------------------------------------------------------------
+% Fragmento o cita con su fuente:
+%   \fragmento{texto citado}{Autor, \emph{Obra} libro, pasaje (DK ...)}
+%   \fragmento*{...}{...}   -> sin comillas (para paráfrasis o resúmenes)
+% ---------------------------------------------------------------------
+\NewDocumentCommand{\fragmento}{s m m}{%
+  \par\vspace{2pt}%
+  {\setlength{\parindent}{0pt}\itshape
+   \IfBooleanTF{#1}{#2}{«#2»}\par}%
+  {\raggedleft\footnotesize\color{ex@gris}--- #3\par}\vspace{2pt}}
+\newcommand{\fuente}[1]{{\footnotesize\color{ex@gris}(#1)}}
+
+% ---------------------------------------------------------------------
+% Imágenes con pie de foto (si el archivo no existe, deja un recuadro)
+%   \figura[ancho]{archivo}{pie}
+%   \retrato[ancho]{archivo}{pie}{texto que va a la derecha}
+% ---------------------------------------------------------------------
+\newcommand{\ex@img}[2]{%
+  \IfFileExists{#2}{\includegraphics[width=#1]{#2}}{%
+    \tikz\draw[ex@gris,dashed](0,0) rectangle (#1,0.42*#1)
+      node[midway,font=\tiny,align=center,text=ex@gris]{Imagen pendiente:\\\detokenize{#2}};}}
+\newcommand{\pie}[1]{{\fontsize{6.5}{7.6}\selectfont\color{ex@gris}#1\par}}
+\NewDocumentCommand{\figura}{O{0.95} m m}{%
+  \par\vspace{2pt}{\centering\ex@img{#1\linewidth}{#2}\par\pie{#3}}\vspace{2pt}}
+\NewDocumentCommand{\retrato}{O{0.30} m m +m}{%
+  \par\vspace{2pt}\noindent
+  \begin{minipage}[t]{#1\linewidth}\vspace{0pt}\centering
+    \ex@img{\linewidth}{#2}\par\pie{#3}\end{minipage}\hfill
+  \begin{minipage}[t]{\dimexpr0.97\linewidth-#1\linewidth\relax}\vspace{0pt}%
+    #4\end{minipage}\par\vspace{2pt}}
+
+% ---------------------------------------------------------------------
+% Línea de tiempo (años negativos = antes de Cristo):
+%   \lineadetiempo[desde=-650, hasta=450, paso=200,
+%                  franjas={-624/-399/presocráticos}]
+%                 {-624/Tales/1, -570/Pitágoras/2, 360/Hipatia/1}
+%   Cada evento: año/etiqueta/nivel (nivel = altura 1, 2, 3; negativo = abajo)
+%   Opción «sinera»: años sin «a. C./d. C.» (para fechas modernas).
+% ---------------------------------------------------------------------
+\pgfkeys{/ldt/.is family,/ldt,
+  desde/.store in=\ldt@desde, hasta/.store in=\ldt@hasta, paso/.store in=\ldt@paso,
+  franjas/.store in=\ldt@franjas, alto/.store in=\ldt@alto,
+  sinera/.code={\def\ldt@sinera{1}},
+  desde=-700, hasta=0, paso=100, franjas={}, alto=0.5}
+\def\ldt@sinera{}
+\newcommand{\ldt@anio}[1]{%
+  \pgfmathtruncatemacro{\ldt@a}{abs(#1)}%
+  \ifx\ldt@sinera\@empty
+    \ifnum#1<0 \ldt@a\,a.\,C.\else\ifnum#1=0 0\else\ldt@a\,d.\,C.\fi\fi
+  \else\ldt@a\fi}
+\NewDocumentCommand{\lineadetiempo}{O{} m}{%
+  \begingroup\pgfkeys{/ldt,#1}%
+  \par\vspace{3pt}\noindent
+  \begin{tikzpicture}[font=\fontsize{6.5}{7.5}\selectfont]
+    \pgfmathsetmacro{\ldt@u}{(\linewidth-6mm)/((\ldt@hasta)-(\ldt@desde))}%
+    \def\ldt@x##1{((##1)-(\ldt@desde))*\ldt@u pt}%
+    \ifx\ldt@franjas\@empty\else
+      \foreach \fa/\fb/\ft in \ldt@franjas{%
+        \fill[ex@suave] ({\ldt@x{\fa}},0.06) rectangle ({\ldt@x{\fb}},3.3*\ldt@alto);
+        \node[text=acento,font=\fontsize{6.5}{7.5}\selectfont\bfseries,anchor=south]
+          at ({(\ldt@x{\fa}+\ldt@x{\fb})/2},3.3*\ldt@alto) {\ft};}\fi
+    \draw[-{Latex[length=2mm]},black!70,thick] (0,0) -- ({\ldt@x{\ldt@hasta}+4mm},0);
+    \pgfmathtruncatemacro{\ldt@primero}{ceil((\ldt@desde)/(\ldt@paso))*(\ldt@paso)}%
+    \pgfmathtruncatemacro{\ldt@segundo}{\ldt@primero+\ldt@paso}%
+    \foreach \t in {\ldt@primero,\ldt@segundo,...,\ldt@hasta}{%
+      \draw[black!55] ({\ldt@x{\t}},-0.06) -- ({\ldt@x{\t}},0.06);
+      \node[below,text=ex@gris,inner sep=2pt] at ({\ldt@x{\t}},-0.06) {\ldt@anio{\t}};}
+    \foreach \ea/\et/\en in {#2}{%
+      \draw[acento!70] ({\ldt@x{\ea}},0) -- ({\ldt@x{\ea}},\en*\ldt@alto);
+      \fill[acento] ({\ldt@x{\ea}},0) circle (1.4pt);
+      \node[anchor=\ifdim\en pt<0pt north\else south\fi,inner sep=1pt,
+            fill=white,fill opacity=0.85,text opacity=1]
+        at ({\ldt@x{\ea}},\en*\ldt@alto) {\et};}
+  \end{tikzpicture}\par\vspace{2pt}\endgroup}
+
+% ---------------------------------------------------------------------
+% Cadena de pasos o transformaciones:
+%   \cadena[resaltar=aire, sep=1.13cm]{fuego,aire,viento,nube,agua}
+% ---------------------------------------------------------------------
+\pgfkeys{/cad/.is family,/cad,resaltar/.store in=\cad@res,sep/.store in=\cad@sep,
+  resaltar={}, sep=1.15cm}
+\NewDocumentCommand{\cadena}{O{} m}{%
+  \begingroup\pgfkeys{/cad,#1}%
+  \begin{tikzpicture}[x=\cad@sep,font=\fontsize{7}{8}\selectfont,
+    n/.style={draw=acento,rounded corners=1pt,inner sep=1.5pt,minimum height=4mm},
+    r/.style={n,fill=acento!25,font=\fontsize{7}{8}\selectfont\bfseries}]
+    \foreach \p [count=\i] in {#2}{%
+      \edef\cad@p{\p}%
+      \ifx\cad@p\cad@res\node[r] (c\i) at (\i,0) {\p};\else\node[n] (c\i) at (\i,0) {\p};\fi
+      \ifnum\i>1 \pgfmathtruncatemacro{\j}{\i-1}%
+        \draw[-{Latex[length=1.3mm]},black!60] (c\j) -- (c\i);\fi}
+  \end{tikzpicture}\endgroup}
+
+% ---------------------------------------------------------------------
+% Diálogo (estilo socrático, obra de teatro, entrevista):
+%   \begin{dialogo} \habla{Sócrates}{...} \habla{Menón}{...} \end{dialogo}
+% ---------------------------------------------------------------------
+\newenvironment{dialogo}{%
+  \par\vspace{2pt}\begin{list}{}{\leftmargin=0pt\itemsep=2pt\topsep=1pt\parsep=0pt}}%
+  {\end{list}\vspace{2pt}}
+\newcommand{\habla}[2]{\item[]{\bfseries\color{acento}#1:}\ #2}
+
+% ---------------------------------------------------------------------
+% Chat simulado (WhatsApp, foro, comentarios en redes):
+%   \begin{chat}[Grupo 7.° B]
+%     \mensaje{Camila}{texto}   (izquierda)
+%     \respuesta{Tú}{texto}     (derecha)
+%   \end{chat}
+% ---------------------------------------------------------------------
+\newtcolorbox{chat}[1][]{enhanced,colback=black!3,colframe=black!25,boxrule=0.4pt,
+  arc=2mm,left=3pt,right=3pt,top=2pt,bottom=2pt,fontupper=\small,
+  before skip=2pt,after skip=2pt,
+  before upper={\def\ex@t{#1}\ifx\ex@t\@empty\else
+    {\centering\fontsize{6.5}{7.5}\selectfont\bfseries\color{ex@gris}#1\par}\vspace{1pt}\fi}}
+\newcommand{\mensaje}[2]{%
+  \par\noindent\begin{tcolorbox}[enhanced,width=0.84\linewidth,colback=white,
+    colframe=black!20,boxrule=0.3pt,arc=1.5mm,left=3pt,right=3pt,top=1pt,bottom=1pt,
+    before skip=2pt,after skip=2pt,fontupper=\small]
+    {\fontsize{6.5}{7.5}\selectfont\bfseries\color{acento}#1}\par #2\end{tcolorbox}}
+\newcommand{\respuesta}[2]{%
+  \par\noindent\hfill\begin{tcolorbox}[enhanced,width=0.84\linewidth,colback=acento!12,
+    colframe=acento!40,boxrule=0.3pt,arc=1.5mm,left=3pt,right=3pt,top=1pt,bottom=1pt,
+    before skip=2pt,after skip=2pt,fontupper=\small]
+    {\fontsize{6.5}{7.5}\selectfont\bfseries\color{acento}#1}\par #2\end{tcolorbox}}
+
+% ---------------------------------------------------------------------
+% Recuadro de concepto o glosario breve:
+%   \concepto{Arjé}{Principio u origen del que surgen todas las cosas.}
+% ---------------------------------------------------------------------
+\newcommand{\concepto}[2]{%
+  \par\vspace{2pt}\noindent\begin{tcolorbox}[enhanced,colback=white,colframe=acento!50,
+    boxrule=0.4pt,arc=1mm,left=4pt,right=4pt,top=2pt,bottom=2pt,fontupper=\small,
+    before skip=2pt,after skip=2pt]
+    \textbf{\color{acento}#1.} #2\end{tcolorbox}}
+
+% ---------------------------------------------------------------------
+% Tabla para completar en una pregunta abierta:
+%   \tablarellenar{filas}{Encabezado 1}{Encabezado 2}{Encabezado 3}
+% ---------------------------------------------------------------------
+\newcommand{\tablarellenar}[4]{%
+  \par\vspace{3pt}\begingroup\small\renewcommand{\arraystretch}{2.1}%
+  \def\ex@filas{}\@tempcnta=0\relax
+  \loop\ifnum\@tempcnta<#1\relax\appto\ex@filas{ & & \\\hline}\advance\@tempcnta 1\relax\repeat
+  \begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}p{0.24\linewidth}|X|X|}\hline
+  \rowcolor{acento!15}\textbf{#2} & \textbf{#3} & \textbf{#4}\\\hline
+  \ex@filas
+  \end{tabularx}\endgroup\par\vspace{2pt}}
+
+% ---------------------------------------------------------------------
+% Créditos de imágenes y fuentes (después de \autoevaluacion)
+% ---------------------------------------------------------------------
+\newcommand{\creditos}[1]{%
+  \par\vspace{4pt}{\fontsize{6}{7}\selectfont\color{black!60}#1\par}}
+
+% ---------------------------------------------------------------------
+% Estilos TikZ y pgfplots coherentes con la plantilla
+% ---------------------------------------------------------------------
+\tikzset{
+  caja/.style={draw=acento,fill=white,rounded corners=1.5pt,inner sep=3pt,
+    font=\fontsize{7}{8.5}\selectfont,align=center},
+  cajaclave/.style={caja,fill=acento!20,font=\fontsize{7}{8.5}\selectfont\bfseries},
+  flecha/.style={-{Latex[length=1.8mm]},black!65,thick},
+  persona/.pic={%
+    \fill (0,0.42) circle (0.11);
+    \draw[line width=1.3pt,line cap=round] (0,0.3) -- (0,0.05) (-0.12,0.22) -- (0.12,0.22)
+      (0,0.05) -- (-0.09,-0.12) (0,0.05) -- (0.09,-0.12);}}
+% eval: estilo base. Con varias series, dar color a cada una: \addplot[fill=black!25] ...
+\pgfplotsset{eval/.style={
+  width=0.92\linewidth, height=4.6cm,
+  tick label style={font=\fontsize{6.5}{7.5}\selectfont},
+  label style={font=\fontsize{7}{8}\selectfont},
+  legend style={font=\fontsize{6.5}{7.5}\selectfont,draw=none,fill=none},
+  axis x line*=bottom, axis y line*=left, ymajorgrids, grid style={black!12},
+  every axis plot post/.append style={mark options={fill=acento}},
+  /pgfplots/ybar/.append style={every axis plot post/.append style={fill=acento!70,draw=acento}},
+  /pgfplots/xbar/.append style={every axis plot post/.append style={fill=acento!70,draw=acento}},
+  nodes near coords style={font=\fontsize{6.5}{7.5}\selectfont\bfseries,text=black}}}
+
+
+% =====================================================================
+%  VERSIÓN DOCENTE: justificaciones y tabla de especificaciones
+%  (solo se imprimen con la opción "solucion" de la clase)
+% =====================================================================
+\newif\ifex@docente
+\@ifclasswith{evaluacion}{solucion}{\ex@docentetrue}{\ex@docentefalse}
+\def\ex@specs{}
+% \justificacion{Por qué la clave es correcta y qué error revela cada distractor.}
+\newcommand{\justificacion}[1]{%
+  \ifex@docente\par\vspace{2pt}\noindent
+  \begin{tcolorbox}[enhanced,colback=green!6,colframe=green!45!black,boxrule=0.4pt,arc=1mm,
+     left=3pt,right=3pt,top=1pt,bottom=1pt,before skip=1pt,after skip=1pt,
+     fontupper=\fontsize{7}{8.4}\selectfont]
+  \textbf{Justificación.} #1\end{tcolorbox}\fi}
+% \especificacion{Competencia}{Evidencia o desempeño que se evalúa}
+\newcommand{\especificacion}[2]{%
+  \xappto\ex@specs{\thepregunta & \eval@correcta & \unexpanded{#1 & #2}\noexpand\\\noexpand\hline}%
+  \ifex@docente\par{\fontsize{6.5}{7.5}\selectfont\color{green!40!black}%
+    \textbf{Competencia:} #1 · \textbf{Evidencia:} #2\par}\fi}
+% Al final (antes de \imprimirclave): tabla con todas las especificaciones
+\newcommand{\tablaespecificaciones}{%
+  \ifex@docente\ifx\ex@specs\@empty\else
+  \par\vspace{6pt}\noindent\begin{minipage}{\linewidth}
+  {\small\bfseries Tabla de especificaciones\par}\vspace{2pt}
+  {\fontsize{7}{8.4}\selectfont\renewcommand{\arraystretch}{1.15}%
+  \begin{tabularx}{\linewidth}{|c|c|p{0.26\linewidth}|X|}\hline
+  \rowcolor{acento!15}\textbf{N.\,\textsuperscript{o}} & \textbf{Clave} & \textbf{Competencia} & \textbf{Evidencia}\\\hline
+  \ex@specs
+  \end{tabularx}}\end{minipage}\fi\fi}
+
+% =====================================================================
+%  HISTORIETA: viñetas con personajes y globos de diálogo
+%   \begin{historieta}[2]            (número de columnas)
+%     \vineta{Ana}{¿De qué está hecho todo?}
+%     \vineta[derecha]{Tales}{¡De agua!}
+%   \end{historieta}
+% =====================================================================
+\newenvironment{historieta}[1][2]{%
+  \par\vspace{2pt}\begin{tcbraster}[raster columns=#1,raster equal height,
+    raster column skip=2pt,raster row skip=2pt]}{\end{tcbraster}\par\vspace{2pt}}
+\NewDocumentCommand{\vineta}{O{izquierda} m +m}{%
+  \begin{tcolorbox}[enhanced,colback=white,colframe=black!70,boxrule=0.6pt,arc=0pt,
+    left=2pt,right=2pt,top=2pt,bottom=1pt,valign=bottom,fontupper=\fontsize{7}{8.2}\selectfont]
+    \begin{tikzpicture}
+      \node[draw=black!70,fill=white,rounded corners=2.5mm,text width=0.78\linewidth,
+        align=center,inner sep=3pt] (g) at (0,1.45) {#3};
+      \ifstrequal{#1}{derecha}{%
+        \pic[black!80] at (0.32\linewidth,0) {persona};
+        \draw[black!70,fill=white] ([xshift=-2mm]g.south east) -- (0.32\linewidth,0.62) -- ([xshift=-6mm]g.south east);
+        \node[font=\fontsize{6.5}{7.5}\selectfont\bfseries,anchor=north] at (0.32\linewidth,-0.15) {#2};}{%
+        \pic[black!80] at (-0.32\linewidth,0) {persona};
+        \draw[black!70,fill=white] ([xshift=2mm]g.south west) -- (-0.32\linewidth,0.62) -- ([xshift=6mm]g.south west);
+        \node[font=\fontsize{6.5}{7.5}\selectfont\bfseries,anchor=north] at (-0.32\linewidth,-0.15) {#2};}
+    \end{tikzpicture}
+  \end{tcolorbox}}
+
+% =====================================================================
+%  TEXTOS PARA COMPARAR (uno debajo del otro, con etiqueta)
+%   \texto{Texto 1 · Heráclito}{contenido}
+% =====================================================================
+\newcommand{\texto}[2]{%
+  \par\vspace{2pt}\noindent\begin{tcolorbox}[enhanced,colback=white,colframe=acento!60,
+    boxrule=0.5pt,arc=1mm,left=4pt,right=4pt,top=7pt,bottom=2pt,
+    before skip=6pt,after skip=3pt,fontupper=\small,
+    attach boxed title to top left={xshift=3mm,yshift=-2mm},
+    boxed title style={colback=acento,colframe=acento,arc=1mm,boxrule=0pt,
+      left=2pt,right=2pt,top=0pt,bottom=0pt},
+    title={\fontsize{6.5}{7.5}\selectfont\bfseries #1},coltitle=white]
+    #2\end{tcolorbox}}
+
+% =====================================================================
+%  SECUENCIA PARA ORDENAR: los eventos llevan números; las opciones
+%  son órdenes posibles, p. ej. \opciones{2-1-4-3}{1-2-3-4}{...}{...}
+%   \secuencia{Evento uno}{Evento dos}{Evento tres}{Evento cuatro}
+% =====================================================================
+\newcommand{\secuencia}[4]{%
+  \par\vspace{2pt}{\small
+  \begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{5mm}X@{}}
+   \tikz\node[circle,draw=acento,fill=acento!15,inner sep=1pt,font=\scriptsize\bfseries]{1}; & #1\\
+   \tikz\node[circle,draw=acento,fill=acento!15,inner sep=1pt,font=\scriptsize\bfseries]{2}; & #2\\
+   \tikz\node[circle,draw=acento,fill=acento!15,inner sep=1pt,font=\scriptsize\bfseries]{3}; & #3\\
+   \tikz\node[circle,draw=acento,fill=acento!15,inner sep=1pt,font=\scriptsize\bfseries]{4}; & #4\\
+  \end{tabularx}}\par}
+
+% =====================================================================
+%  CÓDIGO QR hacia un recurso visto en clase (video, lectura)
+%   \qr{https://...}{Escanea para volver a ver el video}
+% =====================================================================
+\RequirePackage{qrcode}
+\newcommand{\qr}[2]{%
+  \par\vspace{2pt}\noindent
+  \begin{minipage}[c]{1.7cm}\qrcode[height=1.5cm]{#1}\end{minipage}%
+  \begin{minipage}[c]{\dimexpr\linewidth-1.7cm\relax}\footnotesize #2\end{minipage}\par\vspace{2pt}}
+
+% =====================================================================
+%  MAPA CONCEPTUAL: estilos para nodos, enlaces y casillas en blanco
+%   \node[nodo] (a) {Arjé}; \node[nodovacio] (b) {?};
+%   \draw[enlace] (a) -- node[etiqueta]{es} (b);
+% =====================================================================
+\tikzset{
+  nodo/.style={draw=acento,fill=acento!10,rounded corners=2pt,inner sep=3pt,
+    font=\fontsize{7}{8.4}\selectfont,align=center,text width=#1},
+  nodo/.default=1.9cm,
+  nodovacio/.style={draw=acento,dashed,fill=white,rounded corners=2pt,inner sep=3pt,
+    font=\bfseries,minimum width=1.6cm,minimum height=6mm},
+  enlace/.style={-{Latex[length=1.6mm]},black!60},
+  etiqueta/.style={font=\fontsize{6.5}{7.5}\selectfont\itshape,fill=white,inner sep=1pt}}
+
+% =====================================================================
+%  IMAGEN CON MARCAS NUMERADAS (para analizar detalles de una obra)
+%   \imagenmarcada[ancho]{archivo}{pie}{x/y/marca, ...}
+%   x, y entre 0 y 1 (fracción del ancho y alto, desde abajo a la izquierda)
+% =====================================================================
+\NewDocumentCommand{\imagenmarcada}{O{0.98} m m m}{%
+  \par\vspace{2pt}{\centering
+  \IfFileExists{#2}{%
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] (im) {\includegraphics[width=#1\linewidth]{#2}};
+    \begin{scope}[x={(im.south east)},y={(im.north west)}]
+      \foreach \mx/\my/\mt in {#4}
+        \node[circle,fill=white,draw=acento,line width=0.9pt,inner sep=1pt,
+              font=\fontsize{7}{8}\selectfont\bfseries,text=acento] at (\mx,\my) {\mt};
+    \end{scope}
+  \end{tikzpicture}}{\ex@img{#1\linewidth}{#2}}\par\pie{#3}}\vspace{2pt}}
+
+\endinput

@@ -1,0 +1,171 @@
+% Taller de repaso y evaluación · Lógica categórica · Filosofía 10.°
+% Tipos de proposición (A, E, I, O) y sus inferencias inmediatas (cuadro de oposición, conversión,
+% obversión, contraposición). Taller de prueba de la skill `talleres` (16/11/2026).
+% Desempeños (no se imprimen; provisionales, no hay malla de ese periodo todavía):
+%   D1 Identificar cantidad y cualidad de una proposición y llevarla a forma estándar (A, E, I, O).
+%   D2 Usar el cuadro de oposición y las inferencias inmediatas para decidir qué se sigue válidamente.
+% Supuestos por confirmar con el docente: grado 10.°, periodo I. Una hora (≈55 min), en parejas, se resuelve en la hoja.
+% Imágenes (Wikimedia Commons, dominio público): img/merienda.jpg (Tenniel, 1865) e
+%   img/cuadro-detalle.jpg (manuscrito del Peri hermeneias de Apuleyo, detalle). Esquemas en TikZ.
+% Fuentes: Carroll, Alicia en el País de las Maravillas (1865), cap. VII (traducción propia);
+% Colón y Lavoe, «Todo tiene su final» (Lo mato, Fania, 1973); refranes populares.
+% Compilar (genera también la versión del docente con respuestas):
+%   bash curriculo/plantilla/compilar.sh curriculo/filosofia/10/taller-logica-categorica.tex
+\documentclass[taller]{planeacion}
+\materia{filosofia}
+\grado{10.°} \periodo{I} \anio{2027}
+\begin{document}
+\fichataller{Lógica}{Repaso y evaluación}{55 min}{En parejas}
+
+\titulotaller{Lógica categórica}{Trabajen en parejas. Todo se resuelve \textbf{en esta hoja} (no en el cuaderno); al final,
+  entréguenla al docente para el sello.}
+
+\reto{0}{Una merienda de locos}{10 min}{1,0}
+\texto{El Sombrerero corrige a Alicia}{%
+\begin{dialogo}
+  \habla{Liebre de Marzo}{Entonces deberías decir lo que piensas.}
+  \habla{Alicia}{Eso hago… o, al menos, pienso lo que digo, que es lo mismo, ¿sabes?}
+  \habla{Sombrerero}{¡No es lo mismo en absoluto! ¡Sería como decir que «veo lo que como» es lo
+    mismo que «como lo que veo»!}
+  \habla{Liebre de Marzo}{¡O que «me gusta lo que tengo» es lo mismo que «tengo lo que me gusta»!}
+  \habla{Lirón}{(hablando dormido) ¡O que «respiro cuando duermo» es lo mismo que «duermo cuando
+    respiro»!}
+\end{dialogo}}
+{Lewis Carroll, \emph{Alicia en el País de las Maravillas} (1865), cap. VII, «Una merienda de
+  locos» (traducción propia).}
+\figura[0.5]{img/merienda.jpg}{La merienda de locos: Alicia, la Liebre de Marzo, el Lirón y el Sombrerero. Ilustración
+  de John Tenniel para la primera edición (1865). Wikimedia Commons, dominio público.}
+\begin{tareas}
+  \tarea{\envozalta lean el diálogo con su pareja (cada uno lee unos personajes).}
+  \tarea{\enlahoja expliquen en una o dos líneas por qué el Sombrerero tiene razón. Piensen en
+    «todo lo que veo…» y «todo lo que como…».}
+\end{tareas}
+\respuesta[2]{Porque invertir sujeto y predicado de una universal afirmativa (A) cambia su sentido:
+  que todo lo que como lo vea no implica que todo lo que veo me lo coma.}
+\begin{tareas}
+  \tarea{\enlahoja inventen su propia trampa del Sombrerero: una pareja de frases sobre el
+    colegio en la que invertir sujeto y predicado \textbf{cambie el sentido}.}
+\end{tareas}
+\respuesta[2]{Ejemplo: «Todos los de grado 11.° usan chaqueta de la promoción» no equivale a «Todos
+  los que usan chaqueta de la promoción son de 11.°».}
+
+
+\reto{0}{De la canción y el refrán a la forma lógica}{12 min}{1,5}
+\recurso{CANCIÓN}{«Todo tiene su final», Willie Colón y Héctor Lavoe (1973)}{El docente la pone al empezar. Las dos primeras frases
+  de la tabla salen de su coro.}
+  {https://www.youtube.com/results?search_query=Todo+tiene+su+final+Willie+Colon+Hector+Lavoe}
+\recuerda[Las cuatro proposiciones categóricas]{%
+  \textbf{A} Todo S es P: universal afirmativa («Todos los perros son mamíferos»).\\
+  \textbf{E} Ningún S es P: universal negativa («Ningún pez es mamífero»).\\
+  \textbf{I} Algún S es P: particular afirmativa («Algunos estudiantes son músicos»).\\
+  \textbf{O} Algún S no es P: particular negativa («Algunos estudiantes no son músicos»).\par\vspace{2pt}
+  \textbf{Forma estándar}: cuantificador + sujeto + es / no es + predicado: «Los gatos cazan»
+  \(\rightarrow\) «Todos los gatos son animales que cazan» (A). «No todo S es P» equivale a la O.}
+\begin{center}
+\noindent  \euler{\draw (0,0) circle (1.25); \node at (0,0.85) {P}; \draw[fill=black!12] (0,-0.25) circle (0.6); \node at (0,-0.25) {S};}{\textbf{A}: todo S está dentro de P}\hfill
+  \euler{\draw[fill=black!12] (-0.8,0) circle (0.7); \node at (-0.8,0) {S}; \draw (0.9,0) circle (0.7); \node at (0.9,0) {P};}{\textbf{E}: S y P no se tocan}\hfill
+  \euler{\draw (-0.45,0) circle (0.85); \draw (0.45,0) circle (0.85); \node at (-1.3,0.75) {S}; \node at (1.3,0.75) {P}; \node at (0,0) {\textbf{x}};}{\textbf{I}: hay algún S en P}\hfill
+  \euler{\draw (-0.45,0) circle (0.85); \draw (0.45,0) circle (0.85); \node at (-1.3,0.75) {S}; \node at (1.3,0.75) {P}; \node at (-0.8,0) {\textbf{x}};}{\textbf{O}: hay algún S fuera de P}
+\par\vspace{3pt}
+{\footnotesize Diagramas de Euler: cada círculo es una clase; la \textbf{x} marca que existe al menos uno.}
+\end{center}
+\begin{tareas}
+  \tarea{\enlahoja escriban cada frase en \textbf{forma estándar} y completen su tipo, cantidad y cualidad.}
+\end{tareas}
+\begin{tablataller}[1.6]{|>{\RaggedRight\arraybackslash}p{5.1cm}|>{\RaggedRight\arraybackslash}X|>{\centering\arraybackslash}p{0.9cm}|>{\centering\arraybackslash}p{1.65cm}|>{\centering\arraybackslash}p{1.65cm}|}
+  \cabecera\tit{Frase} & \tit{Forma estándar} & \tit{Tipo} & \tit{Cantidad} & \tit{Cualidad}\\ \hline
+  «Todo tiene su final» & \sol{Todas las cosas son cosas que tienen final.} & \sol{A} & \sol{Universal} & \sol{Afirmativa}\\ \hline
+  «Nada dura para siempre» & \sol{Ninguna cosa es algo que dura para siempre.} & \sol{E} & \sol{Universal} & \sol{Negativa}\\ \hline
+  «No todo lo que brilla es oro» & \sol{Algunas cosas que brillan no son oro.} & \sol{O} & \sol{Particular} & \sol{Negativa}\\ \hline
+  «Unos nacen con estrella…» & \sol{Algunas personas son personas que nacen con estrella.} & \sol{I} & \sol{Particular} & \sol{Afirmativa}\\ \hline
+  «Perro que ladra no muerde» & \sol{Ningún perro que ladra es un perro que muerde.} & \sol{E} & \sol{Universal} & \sol{Negativa}\\ \hline
+  «Todos los caminos llevan a Roma» & \sol{Todos los caminos son caminos que llevan a Roma.} & \sol{A} & \sol{Universal} & \sol{Afirmativa}\\ \hline
+\end{tablataller}
+
+
+\reto{0}{El cuadro de oposición}{15 min}{1,5}
+\recuerda[Las relaciones del cuadro de oposición]{%
+  \textbf{Contradictorias} (A–O y E–I, las diagonales): siempre tienen valor opuesto; si una es V, la
+  otra es F, y al revés. \textbf{Contrarias} (A–E): no pueden ser ambas verdaderas, pero sí ambas
+  falsas. \textbf{Subcontrarias} (I–O): no pueden ser ambas falsas, pero sí ambas verdaderas.
+  \textbf{Subalternas} (A\(\rightarrow\)I y E\(\rightarrow\)O): si la universal es V, la particular
+  es V; si la particular es F, la universal es F. En los demás casos no se puede saber (?).}
+\imagenlado[0.29]{img/cuadro-detalle.jpg}{\textbf{Así lo dibujaban en la Edad Media.} Este cuadro está en un manuscrito del \emph{Peri
+  hermeneias} atribuido a Apuleyo (siglo II), copiado a mano por monjes. En los bordes y en las
+  diagonales los copistas escribieron en latín el nombre de cada relación: \emph{contrariae},
+  \emph{subcontrariae}, \emph{subalternae}… y en las diagonales que se cruzan, las contradictorias.\par
+  \vspace{2pt}{\footnotesize Detalle del manuscrito. Wikimedia Commons, dominio público.}}
+\needspace{12\baselineskip}
+\begin{tareas}
+  \tarea{\envozalta comparen el manuscrito con el cuadro de abajo: ¿qué relación se dibuja con
+    las dos diagonales que se cruzan?}
+  \tarea{\enlahoja escriban en cada recuadro punteado el nombre de la relación (las dos diagonales
+    comparten nombre).}
+\end{tareas}
+\begin{center}\vspace{-4pt}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \node[nodo=2.7cm] (A) at (0,1.75) {\textbf{A}\\ Todo S es P};
+  \node[nodo=2.7cm] (E) at (8,1.75) {\textbf{E}\\ Ningún S es P};
+  \node[nodo=2.7cm] (I) at (0,0) {\textbf{I}\\ Algún S es P};
+  \node[nodo=2.7cm] (O) at (8,0) {\textbf{O}\\ Algún S no es P};
+  \draw[black!65] (A) -- (E) (I) -- (O) (A) -- (O) (E) -- (I);
+  \draw[enlace] (A) -- (I); \draw[enlace] (E) -- (O);
+  \node[nodovacio,minimum width=3cm] at (4,1.75) {\sol{contrarias}};
+  \node[nodovacio,minimum width=3cm] at (4,0) {\sol{subcontrarias}};
+  \node[nodovacio,minimum width=3cm] at (4,0.88) {\sol{contradictorias}};
+  \node[nodovacio,minimum width=2.4cm] at (-0.05,0.88) {\sol{subalternas}};
+  \node[nodovacio,minimum width=2.4cm] at (8.05,0.88) {\sol{subalternas}};
+\end{tikzpicture}\vspace{-4pt}
+\end{center}
+\begin{tareas}
+  \tarea{Con el cuadro, completen la tabla: escriban \textbf{V} (verdadera), \textbf{F} (falsa) o
+    \textbf{?} (no se puede saber) en cada casilla vacía.}
+\end{tareas}
+\begin{tablataller}{|>{\RaggedRight\arraybackslash}X|>{\centering\arraybackslash}p{1.2cm}|>{\centering\arraybackslash}p{1.2cm}|>{\centering\arraybackslash}p{1.2cm}|>{\centering\arraybackslash}p{1.2cm}|}
+  \cabecera\tit{Si sabemos que…} & \tit{A} & \tit{E} & \tit{I} & \tit{O}\\ \hline
+  «Todos los gatos de Cheshire sonríen» es \textbf{verdadera} (A). & V & \sol{F} & \sol{V} & \sol{F}\\ \hline
+  «Algún invitado a la merienda es cuerdo» es \textbf{falsa} (I). & \sol{F} & \sol{V} & F & \sol{V}\\ \hline
+\end{tablataller}
+
+\reto{0}{Inferencias inmediatas}{18 min}{1,0}
+\recuerda[Las inferencias inmediatas]{%
+  \textbf{Conversión}: intercambiar sujeto y predicado. Es válida en E e I («Ningún S es P»
+  \(\rightarrow\) «Ningún P es S»); en A solo por limitación («Todo S es P» \(\rightarrow\) «Algún P
+  es S»); la O no se convierte. \textbf{Obversión}: cambiar la cualidad y negar el predicado («Todo S
+  es P» \(\rightarrow\) «Ningún S es no-P»); es válida en las cuatro. \textbf{Contraposición}: poner
+  como sujeto la negación del predicado y como predicado la negación del sujeto («Todo S es P»
+  \(\rightarrow\) «Todo no-P es no-S»); es válida en A y O.}
+\begin{tareas}
+  \tarea{\enlahoja hagan la operación indicada, escriban el resultado y, en la última columna,
+    \textbf{Sí} o \textbf{No}: ¿se sigue válidamente?}
+\end{tareas}
+\begin{tablataller}[1.4]{|>{\RaggedRight\arraybackslash}p{6.4cm}|>{\centering\arraybackslash}p{2.75cm}|>{\RaggedRight\arraybackslash}X|>{\centering\arraybackslash}p{1.3cm}|}
+  \cabecera\tit{Proposición} & \tit{Operación} & \tit{Resultado} & \tit{¿Válida?}\\ \hline
+  Todos los sombrereros están locos. & Conversión simple & \sol{Todos los locos son sombrereros… (no se sigue; solo: algunos locos son sombrereros).} & \sol{No}\\ \hline
+  Ningún gato de Cheshire es puntual. & Conversión & \sol{Ningún ser puntual es gato de Cheshire.} & \sol{Sí}\\ \hline
+  Todos los invitados son impuntuales. & Obversión & \sol{Ningún invitado es puntual.} & \sol{Sí}\\ \hline
+  Todos los relojes de la Liebre marcan las seis. & Contraposición & \sol{Todo lo que no marca las seis no es reloj de la Liebre.} & \sol{Sí}\\ \hline
+\end{tablataller}
+\begin{center}
+\begin{tikzpicture}[scale=0.68,every node/.style={font=\small}]
+  \draw (0,0) circle (1.5); \node at (0,0.9) {mamíferos};
+  \draw[fill=black!12] (0,-0.35) circle (0.75); \node at (0,-0.35) {perros};
+  \node[right,text width=9cm,align=left] at (2.1,0) {Ejemplo: «Todos los perros son mamíferos» (A).\\
+    Si se convierte simplemente, «Todos los mamíferos son perros» \textbf{no} se sigue: el círculo
+    grande tiene mamíferos que no son perros. Sí se sigue «algunos mamíferos son perros».};
+\end{tikzpicture}
+\end{center}
+\respuestaia{Si todos los estudiantes del colegio viven en el barrio, entonces todos los que viven en el barrio
+  son estudiantes del colegio. Y como ningún gato habla, ningún ser que habla es un gato. Las dos son
+  conversiones, así que las dos son válidas.}
+\begin{tareas}
+  \tarea{Lean la respuesta del asistente de IA y, \textbf{en las líneas}, expliquen en qué se equivoca
+    usando el nombre de la regla. (Pista: ¿todos los vecinos del barrio estudian en el colegio?)}
+\end{tareas}
+\respuesta[2]{La primera es inválida: una A no se convierte simplemente (solo por limitación:
+  «algunos que viven en el barrio son estudiantes del colegio»). La segunda sí es válida: la E se convierte
+  simplemente.}
+
+
+\cierretaller{5,0}
+\end{document}

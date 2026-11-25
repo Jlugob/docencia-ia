@@ -1,0 +1,5 @@
+{
+  "_nota": "Carpetas de Google Drive de la planeación (las llena Claude al crearlas). Estructura: Planeación/<Materia>/<Grado>°/<Año> – Periodo <n>. Las carpetas son privadas hasta que el docente autorice compartirlas (para el QR del programa).",
+  "planeacion": null,
+  "materias": {}
+}

@@ -1,0 +1,274 @@
+% Catálogo de formatos para las evaluaciones (clase `evaluacion` + `evaluacion-extras`).
+% Muestra cada tipo de pregunta y de contexto disponible, con ejemplos de filosofía.
+% Compilar: bash .claude/skills/evaluaciones-latex/scripts/compilar.sh evaluaciones/plantilla/catalogo-formatos.tex
+% (la versión _docente muestra justificaciones, especificaciones y la tabla final)
+\documentclass[carta,doscolumnas,compacta]{evaluacion}
+\usepackage{evaluacion-extras}
+
+% Colegio, logo, color y docente: de curriculo/config/colegio.yaml y docente.yaml.
+% Para otro valor en este documento: \colegio{…} \logo{archivo.png} \colorcolegio{166534} \docente{…}
+\asignatura{Filosofía}
+\grado{Catálogo}
+\periodo{Cuarto periodo}
+\anio{2026}
+\fecha{13/11/2026}
+\titulo{Catálogo de formatos para evaluaciones}
+\instrucciones{Este documento no es una evaluación: muestra los formatos disponibles. Cada pregunta
+indica en su primera línea (entre corchetes) el nombre del formato y el comando que lo produce. En la
+versión del docente aparecen además la justificación de la respuesta, la competencia evaluada y, al
+final, la tabla de especificaciones.}
+
+\newcommand{\formato}[2]{{\fontsize{6.5}{7.5}\selectfont\color{acento}[\textbf{#1} · \texttt{#2}]}\par}
+
+\begin{document}
+\encabezado
+
+\begin{preguntas}
+
+% ------------------------------------------------------------ 1. Fragmento + retrato
+\begin{contexto}[Fragmentos citados y retrato]
+\grupo{Responde la pregunta 1 con base en el fragmento.}
+\formato{Retrato con texto al lado}{\textbackslash retrato}
+\retrato[0.32]{../ejemplos/img/filosofia6/heraclito.jpg}{\emph{Heráclito}, J. Moreelse (c.\ 1630).}%
+{\fragmento{A quienes entran en los mismos ríos, los bañan aguas siempre distintas.}{Heráclito, DK 22 B 12}
+\fragmento{Lo frío se calienta, lo caliente se enfría, lo húmedo se seca, lo seco se humedece.}{DK 22 B 126}}
+\end{contexto}
+
+\begin{pregunta}[C]
+\formato{Selección única sobre fragmentos}{\textbackslash fragmento}
+¿Qué idea comparten los dos fragmentos?
+\opcioneslargas
+  {Que el agua es el principio del que surgen todas las cosas.}
+  {Que los ríos son sagrados y no deben tocarse dos veces.}
+  {Que la realidad está en cambio constante y los opuestos se transforman uno en otro.}
+  {Que los sentidos engañan y por eso no debemos fiarnos del cambio.}
+\justificacion{B 12 y B 126 hablan del cambio continuo. A atribuye la tesis de Tales;
+  B toma literalmente la imagen del río; D es la tesis contraria (parmenídea).}
+\especificacion{Interpretativa}{Identifica la idea común a dos fragmentos.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 2. Imagen marcada
+\begin{contexto}[Análisis de una obra de arte]
+\grupo{Responde la pregunta 2 con base en la imagen.}
+\formato{Imagen con marcas numeradas}{\textbackslash imagenmarcada}
+\imagenmarcada{../ejemplos/img/comun/atenas.jpg}{Rafael, \emph{La escuela de Atenas} (1509--1511),
+Palacios Vaticanos.}{0.475/0.63/1, 0.555/0.63/2}
+En el centro de la pintura, el personaje \textbf{1} (Platón) señala hacia el cielo; el personaje
+\textbf{2} (Aristóteles) extiende la mano con la palma hacia la tierra.
+\end{contexto}
+
+\begin{pregunta}[A]
+\formato{Pregunta sobre detalles de una imagen}{\textbackslash imagenmarcada}
+Si Platón buscaba la verdad en un mundo de ideas más allá de lo que vemos, y Aristóteles en el
+estudio de las cosas de este mundo, ¿qué expresan los gestos que pintó Rafael?
+\opcioneslargas
+  {Las dos direcciones de su búsqueda: hacia lo que está más allá de lo sensible, y hacia la realidad que podemos observar.}
+  {Que estaban discutiendo sobre el clima de Atenas: uno señala las nubes y el otro el suelo mojado de la plaza.}
+  {Que Platón era más importante que Aristóteles, porque su mano está más alta y él ocupa el centro de la escena.}
+  {Que ambos pensaban exactamente lo mismo sobre la verdad, aunque cada uno lo expresaba con un gesto distinto.}
+\justificacion{Los gestos simbolizan las dos orientaciones filosóficas. B es una lectura literal;
+  C convierte la altura en jerarquía; D ignora que los gestos son opuestos.}
+\especificacion{Interpretativa}{Relaciona elementos visuales con ideas filosóficas.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 3. Línea de tiempo + I-II-III
+\begin{contexto}[Línea de tiempo]
+\grupo{Responde la pregunta 3 con base en la línea de tiempo.}
+\formato{Línea de tiempo}{\textbackslash lineadetiempo}
+\lineadetiempo[desde=-650,hasta=450,paso=200,franjas={-624/-399/presocráticos}]
+  {-624/Tales/1, -570/Pitágoras/2.8, -515/Heráclito/1.6, -399/Sócrates/-0.6, 360/Hipatia/1}
+\end{contexto}
+
+\begin{pregunta}[D]
+\formato{Afirmaciones I, II, III}{afirmaciones}
+Lee las afirmaciones:
+\begin{afirmaciones}
+\item Tales vivió antes que Pitágoras.
+\item Hipatia vivió en la misma época que los presocráticos.
+\item Entre la muerte de Sócrates e Hipatia pasaron más de 700 años.
+\end{afirmaciones}
+¿Cuáles son correctas?
+\opciones{Solo I}{Solo II}{II y III}{I y III}
+\justificacion{I y III se leen en la línea de tiempo; II es falsa: Hipatia está muy a la
+  derecha de la franja de los presocráticos.}
+\especificacion{Interpretativa}{Ubica autores en el tiempo y calcula distancias.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 4. Afirmación y razón
+\begin{pregunta}[C]
+\formato{Afirmación y razón}{\textbackslash afirmacion + \textbackslash afirmacionrazon}
+\afirmacion{conocemos a Heráclito por fragmentos}{Heráclito escribió solo frases sueltas y nunca un libro}
+\afirmacionrazon
+\justificacion{La afirmación es verdadera, pero la razón es falsa: Heráclito escribió un libro
+  que se perdió; lo conservado son citas de otros autores.}
+\especificacion{Argumentativa}{Evalúa la relación causal entre dos enunciados.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 5. Historieta
+\begin{contexto}[Historieta]
+\grupo{Responde la pregunta 5 con base en la historieta.}
+\formato{Viñetas con globos de diálogo}{historieta + \textbackslash vineta}
+\begin{historieta}[2]
+  \vineta{Sofía}{Todo mi curso dice que este celular es el mejor.}
+  \vineta[derecha]{Mateo}{¿Y eso lo hace el mejor?}
+  \vineta{Sofía}{¡Claro! Si lo dicen 30 personas, tiene que ser cierto.}
+  \vineta[derecha]{Mateo}{Hmm\ldots\ ¿y qué razones dan?}
+\end{historieta}
+\end{contexto}
+
+\begin{pregunta}[B]
+\formato{Pregunta sobre una historieta}{historieta}
+¿Qué error hay en el razonamiento de Sofía?
+\opcioneslargas
+  {Ataca a Mateo en lugar de responder su pregunta.}
+  {Supone que algo es verdadero solo porque muchas personas lo creen.}
+  {Presenta solo dos opciones cuando en realidad existen más.}
+  {Saca una conclusión a partir de una sola experiencia personal.}
+\justificacion{Apelación a la mayoría. A (contra la persona), C (falso dilema) y D
+  (generalización apresurada) son falacias que no aparecen en el diálogo.}
+\especificacion{Argumentativa}{Identifica una falacia en una situación cotidiana.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 6. Chat
+\begin{contexto}[Chat simulado]
+\grupo{Responde la pregunta 6 con base en la conversación.}
+\formato{Chat de mensajería}{chat + \textbackslash mensaje + \textbackslash respuesta}
+\begin{chat}[Grupo de 7.\textsuperscript{o} B]
+  \mensaje{Camila}{Si dejamos usar el celular en el descanso, después lo usarán en clase, luego en
+  los exámenes y al final nadie aprenderá nada.}
+  \respuesta{Tú}{¿Y por qué una cosa lleva necesariamente a la otra?}
+\end{chat}
+\end{contexto}
+
+\begin{pregunta}[D]
+\formato{Pregunta sobre un chat}{chat}
+El argumento de Camila es un ejemplo de
+\opciones{apelación a la mayoría.}{falacia contra la persona.}{falso dilema.}{pendiente resbaladiza.}
+\justificacion{Encadena consecuencias cada vez peores sin mostrar que una lleve a la otra.}
+\especificacion{Interpretativa}{Clasifica un razonamiento según el tipo de falacia.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 7. Dos textos
+\begin{contexto}[Textos para comparar]
+\grupo{Responde la pregunta 7 con base en los dos textos.}
+\formato{Textos en contraste}{\textbackslash texto}
+\texto{Texto 1 · Heráclito}{Todo fluye: el mundo es un fuego siempre vivo que se enciende y se
+apaga con medida (DK 22 B 30).}
+\texto{Texto 2 · Parménides (adaptado)}{Lo que es, es, y no puede no ser. El cambio que percibimos
+es un engaño de los sentidos (DK 28 B 8).}
+\end{contexto}
+
+\begin{pregunta}[A]
+\formato{Comparación de posturas}{\textbackslash texto}
+¿En qué punto se oponen los dos textos?
+\opcioneslargas
+  {En si el cambio es real o es solo una apariencia de los sentidos.}
+  {En si el principio de todas las cosas es el agua o el aire.}
+  {En si los dioses crearon el mundo o lo crearon los seres humanos.}
+  {En si la filosofía debe estudiar la naturaleza o la vida en la ciudad.}
+\justificacion{El desacuerdo es sobre la realidad del cambio. B, C y D introducen temas
+  que ninguno de los dos textos trata.}
+\especificacion{Argumentativa}{Contrasta dos posturas filosóficas.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 8. Mapa conceptual
+\begin{pregunta}[B]
+\formato{Mapa conceptual con casilla vacía}{estilos nodo, nodovacio, enlace}
+¿Qué concepto completa el mapa?
+\begin{center}
+\begin{tikzpicture}[node distance=6mm and 4mm]
+  \node[nodo=2.6cm] (p) {Filósofos presocráticos};
+  \node[nodo,below left=8mm and -3mm of p] (n) {la naturaleza (\emph{physis})};
+  \node[nodovacio,below right=8mm and -3mm of p] (v) {?};
+  \node[nodo,below=of v] (e) {agua, aire, fuego, número\ldots};
+  \draw[enlace] (p) -- node[etiqueta]{estudian} (n);
+  \draw[enlace] (p) -- node[etiqueta]{buscan el} (v);
+  \draw[enlace] (v) -- node[etiqueta]{por ejemplo} (e);
+\end{tikzpicture}
+\end{center}
+\opciones{el mito}{el principio (\emph{arjé})}{la ciudad (\emph{polis})}{la virtud}
+\justificacion{Los ejemplos (agua, aire, fuego, número) son propuestas de \emph{arjé}.}
+\especificacion{Interpretativa}{Completa relaciones entre conceptos.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 9. Secuencia
+\begin{pregunta}[C]
+\formato{Ordenar una secuencia}{\textbackslash secuencia}
+Ordena del más antiguo al más reciente:
+\secuencia{Diels reúne los fragmentos en un libro.}{Heráclito escribe su libro.}
+  {Simplicio copia citas de Heráclito.}{Aristóteles cita a Heráclito.}
+\opciones{1-2-3-4}{2-3-4-1}{2-4-3-1}{4-2-3-1}
+\justificacion{Heráclito (c.\ 500 a.\,C.), Aristóteles (s.\ IV a.\,C.), Simplicio (s.\ VI d.\,C.),
+  Diels (1903). B invierte a Aristóteles y Simplicio.}
+\especificacion{Interpretativa}{Reconstruye la transmisión de un texto antiguo.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 10. Gráfica
+\begin{pregunta}[A]
+\formato{Gráfica con datos}{pgfplots, estilo eval}
+Se preguntó a 120 estudiantes para qué sirve la filosofía (una opción cada uno):
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[eval,xbar,width=0.82\linewidth,height=3.6cm,xmin=0,xmax=50,bar width=6pt,ytick={1,2,3,4},
+  yticklabels={No sirve,Entender el mundo,Argumentar,Pensar por uno mismo},
+  nodes near coords,enlarge y limits=0.18,xmajorgrids,ymajorgrids=false]
+  \addplot coordinates {(18,1) (24,2) (36,3) (42,4)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+¿Qué conclusión está respaldada por los datos?
+\opcioneslargas
+  {Cuatro de cada cinco encuestados le atribuyen alguna utilidad relacionada con pensar o comprender.}
+  {La mayoría de los encuestados cree que sirve, sobre todo, para pensar por uno mismo.}
+  {Más de la mitad de los encuestados opina que la filosofía no sirve para nada.}
+  {Todos los estudiantes del país piensan lo mismo que estos encuestados.}
+\justificacion{$24+36+42=102$, y $102/120=0{,}85$, más de 4 de cada 5. B es la trampa:
+  $42/120=35\%$ es la opción más votada, pero no mayoría. D generaliza más allá de la muestra.}
+\especificacion{Interpretativa}{Infiere conclusiones válidas a partir de datos.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 11. Diálogo + QR
+\begin{contexto}[Diálogo y recurso con código QR]
+\grupo{Responde la pregunta 11 con base en el diálogo.}
+\formato{Diálogo}{dialogo + \textbackslash habla}
+\begin{dialogo}
+\habla{Lucía}{Ser valiente es no tener miedo.}
+\habla{Profesor}{¿Y un bombero que siente miedo, pero entra a salvar a un niño?}
+\habla{Lucía}{Es valiente\ldots\ Entonces mi definición no funciona.}
+\end{dialogo}
+\formato{Código QR}{\textbackslash qr}
+\qr{https://es.wikipedia.org/wiki/M\%C3\%A9todo_socr\%C3\%A1tico}{Escanea para repasar el método
+socrático (enlace de ejemplo: cámbialo por el video o la lectura vista en clase).}
+\end{contexto}
+
+\begin{pregunta}[B]
+\formato{Pregunta sobre un diálogo}{dialogo}
+¿Qué hace el profesor en el diálogo?
+\opcioneslargas
+  {Le da a Lucía la definición correcta de valentía para que la memorice.}
+  {Usa un contraejemplo para que Lucía descubra que su definición falla.}
+  {Demuestra que la valentía no existe, porque todos sentimos miedo.}
+  {Cambia de tema porque la definición de Lucía no le interesa.}
+\justificacion{Es la refutación socrática por contraejemplo. A es lo contrario del método;
+  C y D no aparecen en el diálogo.}
+\especificacion{Argumentativa}{Reconoce el uso de contraejemplos.}
+\end{pregunta}
+
+% ------------------------------------------------------------ 12. Abierta con tabla
+\begin{pregunta}[abierta]
+\formato{Abierta con tabla para completar}{\textbackslash tablarellenar}
+Completa la tabla con dos filósofos y escribe en qué se parecen.
+\tablarellenar{2}{Filósofo}{Principio (arjé)}{Observación que lo apoya}
+\abierta[2]
+\modelo{Ejemplo: Tales (agua; el alimento es húmedo) y Anaxímenes (aire; el aire cambia al
+condensarse). Se parecen en que explican con la naturaleza y no con mitos.}
+\end{pregunta}
+
+\end{preguntas}
+
+\autoevaluacion
+\creditos{Imágenes de Wikimedia Commons, dominio público: \emph{Heráclito}, Johannes Moreelse
+(c.\ 1630); \emph{La escuela de Atenas}, Rafael (1509--1511). Fragmentos: numeración Diels-Kranz (DK).}
+\tablaespecificaciones
+\imprimirclave
+\end{document}

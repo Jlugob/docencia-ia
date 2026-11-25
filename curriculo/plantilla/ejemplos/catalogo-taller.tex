@@ -1,0 +1,40 @@
+% Catálogo de componentes del taller (taller-recursos.sty): un ejemplo de cada uno.
+% Compilar: bash curriculo/plantilla/compilar.sh curriculo/plantilla/ejemplos/catalogo-taller.tex
+\documentclass[taller]{planeacion}
+\graphicspath{{../}}
+\materia{filosofia}
+\grado{10.°} \periodo{I} \anio{2027}
+\begin{document}
+\fichataller{Catálogo}{Componentes del taller}{55 min}{En parejas}
+\titulotaller{Componentes del taller}{Un ejemplo de cada comando; la versión del docente muestra las soluciones en vino.}
+\seccion{1}{Textos, fuentes y recursos}
+\texto{TEXTO 1 · RÓTULO}{Contenido del texto citado, con el fragmento exacto.}{Autor, \emph{Obra} (año), cap. o p. (traducción propia)}
+\recuerda{Explicación breve con un ejemplo, para que el taller no dependa de la memoria.}
+\concepto{Proposición}{Enunciado que puede ser verdadero o falso.}
+\recurso{VIDEO}{Título del recurso (autor, año, 4 min)}{Qué hacer mientras lo ven. Sin enlace sale «QR pendiente».}{}
+\figura[0.3]{no-existe.png}{Pie con autor, obra, año y licencia. (Archivo faltante: recuadro de aviso.)}
+\imagenlado[0.25]{no-existe.png}{Imagen a la izquierda y su explicación a la derecha (\texttt{\textbackslash imagenlado}).}
+\noindent\euler{\draw (0,0) circle (1.2); \draw[fill=black!12] (0,-0.25) circle (0.55); \node at (0,-0.25) {S}; \node at (0,0.8) {P};}{Diagrama de Euler (\texttt{\textbackslash euler})}\par
+\respuestaia{Respuesta de un asistente de IA con un error plausible para analizar.}
+\seccion{2}{Actividades}
+\reto{0}{Punto con tiempo y puntaje}{10 min}{2,0}
+Completar en línea: la proposición «Algún S no es P» es de tipo \hueco[O]{1.5cm}.
+\begin{verdaderofalso}
+  \vf{V}{Toda proposición A es universal.}
+  \vf{F}{La O se convierte simplemente.}
+\end{verdaderofalso}
+\begin{opciones}
+  \op{Conversión de una A}
+  \op*{Obversión de una E}
+\end{opciones}
+\pista{Ayuda breve que orienta sin regalar la respuesta.}
+\reto{0}{Relacionar}{10 min}{1,5}
+\relacionar{{Contrarias},{Contradictorias},{Subalternas}}{{A y O},{A e I},{A y E}}[1/c,2/a,3/b]
+\reto{0}{Tabla y respuesta abierta}{10 min}{1,5}
+\begin{tablataller}{|>{\RaggedRight\arraybackslash}p{5cm}|>{\RaggedRight\arraybackslash}X|}
+  \cabecera\tit{Dato} & \tit{Respuesta}\\ \hline
+  Ejemplo & \sol{Solución del docente}\\ \hline
+\end{tablataller}
+\respuesta[2]{Respuesta modelo que solo ve el docente.}
+\cierre{5,0}{\logro{Logro 1}\logro{Logro 2}}
+\end{document}

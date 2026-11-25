@@ -1,0 +1,8 @@
+# Generados al compilar
+curriculo/config/kit-config.tex
+*.aux
+*.log
+*.out
+*.synctex.gz
+*_docente.tex
+__pycache__/

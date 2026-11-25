@@ -1,0 +1,16 @@
+% Ejemplo con texto de relleno (lorem ipsum): malla de Tecnología, 6.°, periodo I.
+\documentclass[malla]{planeacion}
+\usepackage{lipsum}
+\graphicspath{{../}}
+\materia{tecnologia}
+\grado{6.°} \periodo{I} \anio{2027}
+\newcommand{\lorem}[2][1]{\lipsum[#1][#2]}
+\begin{document}
+\begin{malla}{\lorem[2]{1-2}}
+  \fila{\textbf{1. Lorem ipsum.} \lorem[3]{1-2}}{Naturaleza y evolución de la T\&I}{\lorem[4]{1-2}}{\lorem[5]{1-2}}{\punto \lorem[6]{1} \punto \lorem[6]{2}}
+  \fila{\textbf{2. Dolor sit amet.} \lorem[7]{1-2}}{Uso y apropiación de la T\&I}{\lorem[8]{1-2}}{\lorem[9]{1-2}}{\punto \lorem[10]{1} \punto \lorem[10]{2}}
+  \fila{\textbf{3. Consectetuer.} \lorem[11]{1-2}}{Solución de problemas con T\&I}{\lorem[12]{1-2}}{\lorem[13]{1-2}}{\punto \lorem[14]{1} \punto \lorem[14]{2}}
+  \fila{\textbf{4. Adipiscing elit.} \lorem[15]{1-2}}{Tecnología, informática y sociedad}{\lorem[16]{1-2}}{\lorem[17]{1-2}}{\punto \lorem[18]{1} \punto \lorem[18]{2}}
+  \fila{\textbf{5. Ut purus elit.} \lorem[19]{1-2}}{Solución de problemas con T\&I}{\lorem[20]{1-2}}{\lorem[21]{1-2}}{\punto \lorem[22]{1} \punto \lorem[22]{2}}
+\end{malla}
+\end{document}

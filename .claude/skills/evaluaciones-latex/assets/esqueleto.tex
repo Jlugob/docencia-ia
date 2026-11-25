@@ -1,0 +1,82 @@
+% Evaluación de <ASIGNATURA> — <GRADO> — <PERIODO> <AÑO>
+% Compilar: bash .claude/skills/evaluaciones-latex/scripts/compilar.sh <este archivo>
+% (genera la versión del estudiante y la del docente con las respuestas marcadas)
+\documentclass[carta,doscolumnas,compacta]{../plantilla/evaluacion}
+\usepackage{../plantilla/evaluacion-extras}  % fragmentos, retratos, líneas de tiempo, historietas...
+
+% Colegio, logo, color y docente: de curriculo/config/colegio.yaml y docente.yaml.
+% Para otro valor en este documento: \colegio{…} \logo{archivo.png} \colorcolegio{166534} \docente{…}
+
+\asignatura{<Asignatura>}
+\grado{<Sexto, Séptimo, ...>}
+\periodo{<Cuarto periodo>}
+\anio{<2026>}
+\fecha{<dd/mm/aaaa>}
+\titulo{Evaluación de <Asignatura>}
+\instrucciones{Tiempo: 1 hora. Todo lo que necesitas para responder está en los textos, tablas,
+esquemas e imágenes: léelos con atención antes de contestar. En las preguntas de selección marca
+una sola respuesta (A, B, C o D). En las de \textbf{afirmación y razón} decide si cada parte es
+verdadera y si la razón explica la afirmación. En las abiertas se califica la claridad y la solidez
+de tus argumentos.}
+
+% \afirmacionrazon, \afirmacion, afirmaciones, \fragmento... vienen de evaluacion-extras.
+
+\begin{document}
+\encabezado
+
+\begin{preguntas}
+
+% ---------------------------------------------------------------- Bloque 1
+\begin{contexto}[<Título del texto o caso>]
+\grupo{Responde las preguntas 1 a 3 con base en el texto.}
+<Resumen de la película, lectura, caso o teoría: todo lo necesario para responder.>
+\fragmento{<Texto citado>}{<Autor, \emph{Obra} libro, pasaje>, adaptado}
+% \retrato[0.30]{img/<carpeta>/<archivo>.jpg}{<Pie: autor, obra, fecha>}{<texto al lado>}
+\end{contexto}
+
+% Selección única (la letra entre corchetes es la sorteada)
+\begin{pregunta}[B]
+<Enunciado que pide analizar, inferir o aplicar.>
+\opcioneslargas{<A>}{<B: correcta>}{<C>}{<D>}
+\justificacion{<Por qué B es correcta y qué error revela cada distractor.>}
+\especificacion{<Interpretativa | Argumentativa | Propositiva>}{<Evidencia que se evalúa>}
+\end{pregunta}
+
+% Afirmaciones I, II, III
+\begin{pregunta}[C]
+Lee las afirmaciones:
+\begin{afirmaciones}
+\item <...>
+\item <...>
+\item <...>
+\end{afirmaciones}
+¿Cuáles son correctas?
+\opciones{Solo I}{Solo III}{I y II}{I, II y III}
+\end{pregunta}
+
+% Afirmación y razón
+\begin{pregunta}[A]
+\afirmacion{<afirmación>}{<razón>}
+\afirmacionrazon
+\end{pregunta}
+
+% Opciones que son imágenes (TikZ o \includegraphics)
+\begin{pregunta}[D]
+<Enunciado>
+\opcionesdiagrama{<imagen A>}{<imagen B>}{<imagen C>}{<imagen D: correcta>}
+\end{pregunta}
+
+% ---------------------------------------------------------------- Abiertas
+\begin{pregunta}[abierta]
+<Pregunta que pida argumentar, decidir o diseñar.>
+\abierta[8]
+\modelo{<Respuesta esperada y criterios de calificación.>}
+\end{pregunta}
+
+\end{preguntas}
+
+\autoevaluacion
+\creditos{<Fuentes de los fragmentos e imágenes con autor y licencia.>}
+\tablaespecificaciones
+\imprimirclave
+\end{document}

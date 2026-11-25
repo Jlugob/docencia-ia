@@ -1,0 +1,32 @@
+# ============================================================================================
+#  IDENTIDAD DEL COLEGIO Y FORMATO DE LOS DOCUMENTOS
+#  Es lo único que hay que cambiar para usar el kit en otro colegio. Todas las plantillas
+#  (malla, parcelación, programa, taller, habilitación y evaluaciones) leen de aquí.
+#  Después de editarlo no hay que hacer nada más: los scripts de compilación lo aplican solos
+#  (o a mano: python3 curriculo/config/configurar.py).
+# ============================================================================================
+
+colegio:
+  nombre: Colegio Demo                    # como debe aparecer en el encabezado
+  municipio: Ciudad, Departamento         # opcional (se imprime tras el nombre); vacío = no se imprime
+  logo: logo-colegio.png                  # archivo dentro de curriculo/config/ (PNG o PDF); si falta, sale un recuadro «LOGO»
+  # Leyenda del encabezado. Vacío = «ESTE DOCUMENTO ES PROPIEDAD INTELECTUAL DEL <NOMBRE>».
+  leyenda: ""
+  # Quién firma la planeación además del docente (pie de malla y parcelación).
+  firma_institucional: COORDINACIÓN ACADÉMICA
+
+formato:
+  # Estilo del encabezado de malla, parcelación, programa, taller y habilitación:
+  #   tabla    → logo | nombre del colegio / nombre del formato / leyenda | página (formato tipo Word,
+  #              el más común en colegios colombianos)
+  #   sencillo → logo y nombre a la izquierda, formato y página a la derecha, una línea debajo
+  encabezado: tabla
+  # Colores en hexadecimal (sin #).
+  color_institucional: "003366"   # nombre del colegio y bordes del encabezado
+  color_programa: "2E5B40"        # franjas y títulos del programa, taller y habilitación
+  color_programa_2: "7C8746"      # segundo tono del degradado de las franjas
+  color_evaluacion: "166534"      # acento de las evaluaciones
+  # Fuente principal (debe estar instalada; DejaVu Sans viene con TeX Live).
+  fuente: DejaVu Sans
+  # Papel de malla y parcelación: oficio (horizontal, 35,56 × 21,59 cm) o carta (horizontal).
+  papel_planeacion: oficio

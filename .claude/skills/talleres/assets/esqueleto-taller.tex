@@ -1,0 +1,47 @@
+% Taller <k> · <Materia> <grado>.° · Periodo <n> · «<Título>» (semana s, clase c de la parcelación)
+% Desempeño(s) (no se imprimen): D… <texto del desempeño de la malla>. Una hora (≈55 min), <modalidad>.
+% Fuentes: <autor, obra, año, capítulo/página> …
+% Compilar (salen estudiante y docente):
+%   bash curriculo/plantilla/compilar.sh curriculo/<materia>/<grado>/taller-<k>-P<n>.tex
+\documentclass[taller,borrador]{planeacion}
+\materia{filosofia}                       % tecnologia | filosofia | etica | emocional | otro nombre
+\grado{10.°} \periodo{IV} \anio{2027}
+\begin{document}
+\fichataller{<k>}{Semana s, clase c}{55 min}{En parejas}
+
+\titulotaller{<Tema>}{<En parejas. Todo se resuelve \textbf{en esta hoja} / en el cuaderno…>}
+
+\reto{0}{<Gancho: escena, canción, imagen>}{5 min}{0,5}
+\texto{<Rótulo>}{<Fragmento real que plantea el problema.>}{<Autor, obra (año), cap./p. (traducción propia)>}
+\begin{tareas}
+  \tarea{\envozalta <acción breve>.}
+  \tarea{\enlahoja <qué deben escribir>.}
+\end{tareas}
+\respuesta[2]{<Respuesta modelo.>}
+
+\reto{0}{<Título del punto 2>}{12 min}{1,5}
+\recurso{CANCIÓN}{<Título (autor, año)>}{<Qué hacer mientras se escucha.>}{<enlace verificado>}
+\begin{tareas}
+  \tarea{\enlahoja <primera acción>.}
+  \tarea{<segunda acción>.}
+\end{tareas}
+\begin{tablataller}{|>{\RaggedRight\arraybackslash}p{5cm}|>{\RaggedRight\arraybackslash}X|>{\centering\arraybackslash}p{1.6cm}|}
+  \cabecera\tit{Dato} & \tit{Lo que deben escribir} & \tit{Tipo}\\ \hline
+  <ítem> & \sol{<respuesta>} & \sol{<x>}\\ \hline
+\end{tablataller}
+\pista{<Ayuda que no regala la respuesta.>}
+
+\reto{0}{<Título del punto 3>}{15 min}{1,5}
+% Diagrama para completar (TikZ con nodo, nodovacio, enlace) o caso para deducir.
+
+\reto{0}{<Título del punto 4>}{15 min}{1,5}
+\respuestaia{<Respuesta de una IA con un error plausible.>}
+\begin{tareas}
+  \tarea{Lean la respuesta y, \textbf{en las líneas}, expliquen en qué se equivoca usando la regla.}
+\end{tareas}
+\respuesta[2]{<Respuesta modelo.>}
+
+\cierre{5,0}{%   los puntos de los puntos suman 5,0: la suma es la nota
+  \logro{<Logro 1>}
+  \logro{<Logro 2>}}
+\end{document}

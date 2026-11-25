@@ -1,0 +1,124 @@
+% Ejemplo completo: muestra todos los elementos del formato.
+% Compilar:  pdflatex evaluacion-ejemplo.tex  (dos veces, para "Página X de Y")
+\documentclass[carta,doscolumnas,compacta]{evaluacion}
+% Opciones: carta|a4 · doscolumnas|unacolumna · normal|compacta|muycompacta
+%           solucion (marca la correcta) · sinautoevaluacion
+
+% Colegio, logo, color y docente: de curriculo/config/colegio.yaml y docente.yaml.
+% Para otro valor en este documento: \colegio{…} \logo{archivo.png} \colorcolegio{166534} \docente{…}
+
+\asignatura{Pensamiento lógico y tecnología}
+\grado{Noveno}
+\periodo{Tercer periodo}
+\anio{2026}
+\docente{Nombre del docente}
+% \fecha{2026-11-12}   % vacío = línea para escribir
+% \estudiante{...}     % vacío = línea para escribir
+\instrucciones{Lee con atención cada pregunta. En las de selección múltiple marca una sola
+respuesta (A, B, C o D). Responde las preguntas abiertas con letra clara en las líneas.}
+
+\begin{document}
+\encabezado
+
+\begin{preguntas}
+
+\begin{contexto}[Lectura: el reciclaje en el colegio]
+\grupo{Responde las preguntas 1 y 2 con base en la siguiente información.}
+En una jornada de reciclaje, cada grado recogió botellas plásticas durante una semana.
+\begin{tabla}{|l|c|c|}
+\encabezados \textbf{Grado} & \textbf{Botellas} & \textbf{Kilogramos} \fila
+Séptimo & 120 & 3,0 \fila
+Octavo  & 95  & 2,4 \fila
+Noveno  & 150 & 3,8 \fila
+\end{tabla}
+\end{contexto}
+
+\begin{pregunta}[C]
+¿Qué grado recogió más botellas?
+\opciones{Séptimo}{Octavo}{Noveno}{Todos recogieron lo mismo}
+\end{pregunta}
+
+\begin{pregunta}[B]
+¿Cuántas botellas recogieron entre los tres grados?
+\opciones{355}{365}{375}{345}
+\end{pregunta}
+
+\begin{pregunta}[A]
+Observa el siguiente programa en Python:
+\begin{codigo}[language=Python]
+total = 0
+for i in range(1, 4):
+    total += i * 2   # se suma el doble
+print(total)
+\end{codigo}
+¿Qué valor imprime?
+\opciones{\cod{12}}{\cod{6}}{\cod{8}}{\cod{24}}
+\end{pregunta}
+
+\begin{pregunta}[D]
+¿Cuál de estas afirmaciones sobre los algoritmos es correcta?
+\begin{opcioneslista}
+\item Un algoritmo solo puede escribirse en un lenguaje de programación.
+\item Un algoritmo puede tener infinitos pasos si el problema es difícil.
+\item El orden de los pasos de un algoritmo no altera el resultado.
+\item Un algoritmo es una secuencia finita y ordenada de pasos que resuelve un problema.
+\end{opcioneslista}
+\end{pregunta}
+
+\begin{pregunta}[B]
+Analiza el siguiente silogismo:
+\silogismo{Todo mamífero es vertebrado.}{Todo perro es mamífero.}{Todo perro es vertebrado.}
+Sea S = perros, M = mamíferos, P = vertebrados. ¿Qué diagrama representa las premisas?
+\opcionesdiagrama
+  {\venn[sombreado={SP,MP},escala=0.45]{S,M,P}}
+  {\venn[sombreado={S,SP,M,SM},escala=0.45]{S,M,P}}
+  {\venn[marcas={SMP},escala=0.45]{S,M,P}}
+  {\venn[sombreado={SMP},escala=0.45]{S,M,P}}
+\end{pregunta}
+
+\begin{pregunta}[C]
+En el diagrama, la región sombreada representa:
+\venn[sombreado={AB},titulo={Estudiantes que practican deportes},escala=0.6]{A,B}
+\opcioneslargas{Los que practican solo A.}{Los que no practican ninguno.}%
+  {Los que practican A y B.}{Los que practican solo B.}
+\end{pregunta}
+
+\begin{pregunta}[A]
+Según el diagrama, ¿qué se puede concluir?
+\venn[sombreado={SM,SMP},marcas={SP},escala=0.6]{S,M,P}
+\opciones{Ningún S es M}{Todo S es M}{Algún S es M}{Ningún S es P}
+\end{pregunta}
+
+\begin{pregunta}[B]
+La gráfica muestra la temperatura de una ciudad durante el día. ¿A qué hora fue máxima?
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+  \draw[->] (0,0) -- (6.4,0) node[right,font=\tiny] {hora};
+  \draw[->] (0,0) -- (0,3.4) node[above,font=\tiny] {°C};
+  \draw[thick,acento] (0,0.8) -- (1,1.5) -- (2,2.6) -- (3,3.0) -- (4,2.2) -- (5,1.4) -- (6,1.0);
+  \foreach \x/\h in {0/6,1/8,2/10,3/12,4/14,5/16,6/18}
+    \draw (\x,0.08) -- (\x,-0.08) node[below,font=\tiny] {\h};
+\end{tikzpicture}
+\end{center}
+\opciones{10:00}{12:00}{14:00}{16:00}
+\end{pregunta}
+
+\begin{pregunta}[abierta]
+Escribe con tus palabras qué es una variable en programación y da un ejemplo.
+\abierta[4]
+\modelo{Una variable es un espacio de memoria con un nombre que guarda un valor que puede
+cambiar durante la ejecución del programa. Ejemplo: \cod{edad = 15}.}
+\end{pregunta}
+
+\begin{pregunta}[abierta]
+Observa la imagen y describe el proceso que representa.
+\imagen[0.7]{ciclo-del-agua.png}
+\abierta[3]
+\modelo{El ciclo del agua: evaporación, condensación, precipitación y escorrentía.}
+\end{pregunta}
+
+\end{preguntas}
+
+\autoevaluacion
+\imprimirclave
+\end{document}

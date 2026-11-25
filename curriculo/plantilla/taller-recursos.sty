@@ -1,0 +1,295 @@
+% =====================================================================================
+%  taller-recursos.sty — Recursos para talleres (y planes de habilitación)
+%  docencia-ia · se carga solo con \documentclass[taller]{planeacion}
+%
+%  Estilo: ver el bloque «ESTILO DEL TALLER (solo con [taller])» más abajo. Retoma lo mejor de evaluaciones/plantilla/evaluacion-extras.sty
+%  (textos con fuente, imágenes con crédito, QR, diálogos, mapas, imágenes con marcas) y agrega
+%  lo propio de un taller: puntos con puntaje (suman 5,0), pistas, juegos de relacionar, verdadero o
+%  falso, tablas para completar, respuesta de una IA para analizar, autoevaluación y sello.
+%
+%  VERSIÓN DEL DOCENTE: compilar.sh genera además <archivo>-docente.pdf con las respuestas
+%  (\sol, \hueco, \respuesta, \vf, \op*, \relacionar con solución). Ver README.md de la plantilla.
+% =====================================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{taller-recursos}[2026/11/16 Recursos para talleres]
+\RequirePackage{tikz,xparse,etoolbox,tabularx,ragged2e,qrcode,graphicx}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{pgfplots}\pgfplotsset{compat=1.18}  % gráficas (datos, funciones, estadística)
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc}
+
+\definecolor{solucion}{HTML}{9B2335}   % vino: solo aparece en la versión del docente
+\newif\if@docente
+\ifdefined\pldocente\@docentetrue\fi
+
+% ---------- Utilidades -------------------------------------------------------------------
+% Solución que solo ve el docente: \sol{texto} (en la del estudiante queda en blanco)
+\newcommand{\sol}[1]{\if@docente\leavevmode{\color{solucion}\itshape #1}\fi}
+% Título de columna en tablas del taller: \tit{Texto}
+\newcommand{\tit}[1]{\leavevmode\color{pinotexto}\bfseries\footnotesize #1}
+% Puntos de una actividad (alineados a la derecha): \puntos{5}
+\newcommand{\puntos}[1]{\hfill{\footnotesize\color{pinotexto}\bfseries (#1 pts)}}
+% Casilla marcada (para la versión del docente)
+\newcommand{\casillamarcada}{\raisebox{-0.15ex}{\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.6pt}%
+  \fcolorbox{pino}{white}{\makebox[1.6ex][c]{\rule{0pt}{1.6ex}\color{solucion}\bfseries\scriptsize X}}}}
+\newcommand{\@casillasol}[1]{\if@docente\ifstrequal{#1}{x}{\casillamarcada}{\casilla}\else\casilla\fi}
+
+% ---------- Textos, fuentes e imágenes ---------------------------------------------------
+% Texto con rótulo y referencia exacta: \texto{TEXTO 1 · Carroll}{contenido}{referencia}
+\newcommand{\texto}[3]{\par\vspace{3pt}\noindent
+  {\rowcolors{1}{}{}\estilotabla\renewcommand{\arraystretch}{1.25}%
+  \begin{tabularx}{\linewidth}{|>{\RaggedRight\arraybackslash}X|}
+    \hline \cellcolor{verdeclaro}\tit{\espaciado{#1}}\\ \hline
+    \small #2\par\vspace{2pt}{\raggedleft\footnotesize\color{pinotexto}#3\par}\\ \hline
+  \end{tabularx}\arrayrulecolor{black}}\par\vspace{4pt}}
+% Imagen con pie y crédito; si falta el archivo sale un recuadro «imagen pendiente»
+%   \figura[0.6]{archivo}{Pie. Autor, obra, año. Fuente/licencia.}
+\NewDocumentCommand{\figura}{O{0.6} m m}{\par\vspace{3pt}{\centering
+  \IfFileExists{#2}{\includegraphics[width=#1\linewidth]{#2}}%
+    {\fbox{\parbox[c][3cm][c]{#1\linewidth}{\centering\footnotesize\color{black!55}Imagen pendiente:\\\texttt{\detokenize{#2}}}}}%
+  \par\vspace{1pt}{\footnotesize #3\par}}\vspace{3pt}}
+% Imagen con marcas numeradas para analizar detalles: \imagenmarcada[ancho]{archivo}{pie}{x/y/marca,…}
+\NewDocumentCommand{\imagenmarcada}{O{0.9} m m m}{\par\vspace{3pt}{\centering
+  \IfFileExists{#2}{%
+  \begin{tikzpicture}
+    \node[anchor=south west,inner sep=0] (im) {\includegraphics[width=#1\linewidth]{#2}};
+    \begin{scope}[x={(im.south east)},y={(im.north west)}]
+      \foreach \mx/\my/\mt in {#4}
+        \node[circle,fill=white,draw=pino,line width=0.9pt,inner sep=1pt,
+              font=\scriptsize\bfseries,text=pinotexto] at (\mx,\my) {\mt};
+    \end{scope}
+  \end{tikzpicture}}{\figura[#1]{#2}{}}\par{\footnotesize #3\par}}\vspace{3pt}}
+% Imagen al lado de un texto (obra, manuscrito, mapa con su explicación):
+%   \imagenlado[ancho de la imagen, fracción]{archivo}{texto que va a la derecha}
+\NewDocumentCommand{\imagenlado}{O{0.3} m +m}{\par\vspace{3pt}\noindent
+  \begin{minipage}[c]{#1\linewidth}\IfFileExists{#2}{\includegraphics[width=\linewidth]{#2}}%
+    {\fbox{\parbox[c][3cm][c]{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\centering\footnotesize Imagen pendiente}}}\end{minipage}\hfill
+  \begin{minipage}[c]{\dimexpr0.96\linewidth-#1\linewidth\relax}\small #3\end{minipage}\par\vspace{4pt}}
+% Diagrama de Euler pequeño con su leyenda, para poner varios en fila con \hfill:
+%   \euler{código TikZ}{leyenda}
+\newcommand{\euler}[2]{\begin{minipage}[b]{0.24\linewidth}\centering\begin{tikzpicture}[scale=0.62,every node/.style={font=\footnotesize}]#1\end{tikzpicture}\par\vspace{2pt}{\footnotesize #2}\end{minipage}}
+% Recurso multimedia con QR (video, canción, podcast, juego, lectura):
+%   \recurso{VIDEO}{Título (autor, año, duración)}{qué hacer con él}{https://…}
+%   Si el enlace está vacío, sale «QR pendiente».
+\newcommand{\recurso}[4]{\par\vspace{3pt}\noindent
+  \begin{minipage}[c]{1.75cm}\ifblank{#4}{\fbox{\parbox[c][1.45cm][c]{1.45cm}{\centering\tiny QR\\pendiente}}}%
+    {\qrcode[height=1.55cm]{#4}}\end{minipage}%
+  \begin{minipage}[c]{\dimexpr\linewidth-1.75cm\relax}%
+    {\setlength{\fboxsep}{1.5pt}\colorbox{verdeclaro}{\color{pinotexto}\scriptsize\bfseries\espaciado{#1}}}\enspace
+    \textbf{#2}\par\vspace{1pt}{\small #3}\end{minipage}\par\vspace{4pt}}
+% Concepto o glosario breve: \concepto{Término}{definición}
+\newcommand{\concepto}[2]{\par\vspace{2pt}\noindent
+  {\rowcolors{1}{}{}\estilotabla\renewcommand{\arraystretch}{1.25}%
+  \begin{tabularx}{\linewidth}{|>{\columncolor{verdeclaro}}p{2.9cm}|>{\RaggedRight\arraybackslash}X|}
+    \hline \tit{#1} & \small #2\\ \hline
+  \end{tabularx}\arrayrulecolor{black}}\par\vspace{3pt}}
+% Diálogo (escena, entrevista, debate): \begin{dialogo} \habla{Sombrerero}{…} \end{dialogo}
+\newenvironment{dialogo}{\par\vspace{2pt}\begin{list}{}{\leftmargin=0pt\itemsep=2pt\topsep=1pt\parsep=0pt}}
+  {\end{list}\vspace{2pt}}
+\newcommand{\habla}[2]{\item[]{\bfseries\color{pinotexto}#1:}\ #2}
+% Respuesta de una IA para analizar (tiempos de la IA): \respuestaia{texto}
+\newcommand{\respuestaia}[1]{\par\vspace{3pt}\noindent
+  {\rowcolors{1}{}{}\estilotabla\renewcommand{\arraystretch}{1.25}%
+  \begin{tabularx}{\linewidth}{|>{\RaggedRight\arraybackslash}X|}
+    \hline \cellcolor{verdeclaro}\tit{\espaciado{UN ASISTENTE DE IA RESPONDIÓ}}\\ \hline
+    \small\ttfamily #1\\ \hline
+  \end{tabularx}\arrayrulecolor{black}}\par\vspace{4pt}}
+
+% ---------- Estructura de juego: retos, pistas, puntos -----------------------------------
+% Encabezado de un punto: \reto{nivel}{Título}{tiempo}{puntos} (el nivel ya no se imprime)
+\newcommand{\reto}[4]{\par\needspace{7\baselineskip}\vspace{5pt}\noindent
+  {\bfseries\color{pinotexto}#2}\hfill{\footnotesize\color{pinotexto}#3\ifblank{#4}{}{ · \textbf{#4 pts}}}%
+  \par\nopagebreak\vspace{2pt}}
+% Pista en letra pequeña: \pista{texto}
+\newcommand{\pista}[1]{\par\vspace{2pt}\noindent{\footnotesize\textbf{Pista:} #1}\par\vspace{2pt}}
+% Espacio en línea para completar: \hueco[solución]{ancho}
+\NewDocumentCommand{\hueco}{O{} m}{\if@docente\underline{\makebox[#2][c]{\color{solucion}\itshape #1}}%
+  \else\underline{\hspace{#2}}\fi}
+% Renglones para responder; en la versión del docente, la respuesta esperada:
+%   \respuesta[renglones]{respuesta esperada}
+\NewDocumentCommand{\respuesta}{O{2} m}{\if@docente\par\vspace{2pt}\noindent
+  \fcolorbox{solucion}{white}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\small\color{solucion}\itshape #2}}%
+  \par\vspace{2pt}\else\lineas{#1}\fi}
+% Verdadero o falso: \begin{verdaderofalso} \vf{V}{enunciado} \vf{F}{enunciado} \end{verdaderofalso}
+\newcounter{pl@vf}
+\newenvironment{verdaderofalso}{\setcounter{pl@vf}{0}\par\begin{list}{}{\leftmargin=1.6em\labelwidth=1.2em
+  \labelsep=0.4em\itemsep=2pt\topsep=2pt\parsep=0pt}}{\end{list}}
+\newcommand{\vf}[2]{\stepcounter{pl@vf}\item[\bfseries\color{pinotexto}\arabic{pl@vf}.] #2\hfill
+  \mbox{\ifstrequal{#1}{V}{\@casillasol{x}}{\casilla}\,V\quad\ifstrequal{#1}{F}{\@casillasol{x}}{\casilla}\,F}}
+% Selección (una o varias): \begin{opciones} \op{texto} \op*{correcta} \end{opciones}
+\newenvironment{opciones}{\par\begin{list}{}{\leftmargin=1.8em\labelwidth=1.3em\labelsep=0.5em
+  \itemsep=1pt\topsep=2pt\parsep=0pt}}{\end{list}}
+\NewDocumentCommand{\op}{s m}{\item[\IfBooleanTF{#1}{\@casillasol{x}}{\casilla}] #2}
+% Relacionar columnas (se unen con líneas): \relacionar{{A},{B},{C}}{{x},{y},{z}}[1/b,2/c,3/a]
+%   Izquierda numerada (1, 2, 3…), derecha con letras (a, b, c…); la solución usa número/letra.
+\NewDocumentCommand{\relacionar}{m m O{}}{\par\vspace{3pt}{\centering
+  \begin{tikzpicture}[x=1cm,y=-0.82cm,every node/.style={font=\small}]
+    \foreach \t [count=\i] in {#1}{
+      \node[anchor=east,text width=6.3cm,align=right] at (-0.25,\i) {\textbf{\i.} \t};
+      \fill[pinotexto] (0,\i) circle (1.6pt) coordinate (L\i);}
+    \foreach \t [count=\i] in {#2}{
+      \node[anchor=west,text width=6.3cm,align=left] at (3.25,\i)
+        {\textbf{\pgfmathparse{{"a","b","c","d","e","f","g","h","i","j"}[\i-1]}\pgfmathresult)} \t};
+      \fill[pinotexto] (3,\i) circle (1.6pt);}
+    \if@docente\ifblank{#3}{}{\foreach \a/\b in {#3}{
+      \draw[solucion,line width=0.9pt] (0,\a) -- (3,\csname pl@l@\b\endcsname);}}\fi
+  \end{tikzpicture}\par}\vspace{3pt}}
+\@tempcnta=0
+\@for\pl@x:=a,b,c,d,e,f,g,h,i,j\do{\advance\@tempcnta 1\relax
+  \expandafter\xdef\csname pl@l@\pl@x\endcsname{\the\@tempcnta}}
+
+% ---------- Tablas del taller ------------------------------------------------------------
+% \begin{tablataller}[altura de fila, 1.55 por defecto]{|P{3cm}|X|X|}  \cabecera\tit{A} & \tit{B} & \tit{C}\\ \hline  … \end{tablataller}
+%   Filas altas para escribir a mano; \sol{…} en las celdas que el estudiante debe llenar.
+\newenvironment{tablataller}[2][1.55]{\par\vspace{3pt}\noindent\begingroup\rowcolors{2}{white}{cremafila}\estilotabla
+  \renewcommand{\arraystretch}{#1}\small\tabularx{\linewidth}{#2}\hline}
+  {\endtabularx\arrayrulecolor{black}\endgroup\par\vspace{3pt}}
+
+% ---------- Mapas y diagramas (estilos para TikZ, esquinas rectas) -----------------------
+\tikzset{
+  nodo/.style={draw=pino,fill=verdeclaro,inner sep=3pt,font=\footnotesize,align=center,text width=#1},
+  nodo/.default=2.2cm,
+  nodovacio/.style={draw=pino,dashed,fill=white,inner sep=3pt,font=\footnotesize\bfseries,
+    minimum width=1.8cm,minimum height=7mm,align=center},
+  enlace/.style={-{Latex[length=1.8mm]},black!65},
+  etiqueta/.style={font=\scriptsize\itshape,fill=white,inner sep=1pt}}
+
+% ---------- Cierre: autoevaluación, puntaje y sello --------------------------------------
+% \begin{autoevaluacion} \logro{Clasifico proposiciones A, E, I, O} … \end{autoevaluacion}
+\newenvironment{autoevaluacion}{\par\vspace{3pt}\noindent\begingroup\rowcolors{2}{white}{cremafila}\estilotabla
+  \renewcommand{\arraystretch}{1.3}\small
+  \tabularx{\linewidth}{|>{\RaggedRight\arraybackslash}X|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{1.6cm}|}
+  \hline\cabecera\tit{Autoevaluación: ¿qué tanto lo logré?} & \tit{Lo logré} & \tit{Casi} & \tit{Aún no}\\ \hline}
+  {\endtabularx\arrayrulecolor{black}\endgroup\par\vspace{3pt}}
+\newcommand{\logro}[1]{#1 & \casilla & \casilla & \casilla\\ \hline}
+% Puntaje y espacio para el sello del docente: \cierretaller{puntaje máximo}
+\newcommand{\cierretaller}[1]{\par\vspace{6pt}\noindent
+  \begin{minipage}[c]{\dimexpr\linewidth-3cm\relax}
+    \textbf{Nota:} \underline{\hspace{1.4cm}} / #1\par
+    \vspace{4pt}{\footnotesize El docente suma los puntos de cada punto del taller (de 0 a #1), revisa en
+    clase y sella.}
+  \end{minipage}\hfill
+  \begin{minipage}[c]{2.6cm}\centering
+    {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.6pt}\fcolorbox{pino}{white}{\parbox[c][1.9cm][b]{2.5cm}{\centering
+      \scriptsize\espaciado{SELLO}\par\vspace{2pt}}}}
+  \end{minipage}\par}
+
+% Cierre compacto: autoevaluación a la izquierda; nota (suma de puntos, de 0 a 5) y sello a la derecha.
+%   \cierre{nota máxima: 5,0}{\logro{…}\logro{…}}
+\newcommand{\cierre}[2]{\par\vspace{4pt}\noindent
+  \begin{minipage}[t]{\dimexpr\linewidth-3.2cm\relax}\vspace{0pt}%
+    \begin{autoevaluacion}#2\end{autoevaluacion}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{2.9cm}\vspace{3pt}\centering
+    {\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.6pt}\fcolorbox{pino}{white}{\parbox[c][2.1cm][b]{2.8cm}{\centering
+      \scriptsize\espaciado{SELLO}\par\vspace{2pt}}}}\par\vspace{4pt}
+    {\small\textbf{Nota:} \underline{\hspace{0.9cm}}\,/\,#1}
+  \end{minipage}\par}
+
+% =====================================================================================
+%  ESTILO DEL TALLER (solo con [taller]), criterios del perfil del autor: letra solo en negro
+%  (negrita para destacar); tablas y ficha en negro con cabecera gris como los formatos del
+%  colegio; verde solo en la barra de los textos citados (como el contexto de las evaluaciones);
+%  sin tiempos impresos; textos en párrafo, no en recuadros; pistas al derecho; Caladea para leer, sans en títulos.
+% =====================================================================================
+\if@taller
+  \setmainfont{Caladea}[Scale=1.0]
+  \newfontfamily\fuentetitulos{DejaVu Sans}[Scale=0.88]
+  \colorlet{cremafila}{white}                % tablas sin rayado
+  % Letra solo en negro (negrita para destacar); tablas y ficha en negro con cabecera gris, como
+  % los formatos del colegio. El verde queda en las líneas separadoras (barra de las citas).
+  \colorlet{pinotexto}{black}\colorlet{pinooscuro}{black}\colorlet{verdeclaro}{grisformato}
+  \colorlet{pino}{black}\colorlet{regla}{black}
+  % Encabezado y ficha en sans, como los formatos del colegio.
+  \let\pl@encabezado\encabezado
+  \renewcommand{\encabezado}{{\fuentetitulos\pl@encabezado}}
+  % Ficha sin duración (el tiempo no se muestra): \fichataller{n}{semana}{duración}{modalidad}
+  \renewcommand{\fichataller}[4]{{\fuentetitulos\small\rowcolors{1}{}{}\estilotabla\renewcommand{\arraystretch}{1.45}%
+    \begin{tabularx}{\linewidth}{|l|X|l|l|l|l|}
+      \hline
+      \@celdaverde{ASIGNATURA} & \@area & \@celdaverde{GRADO} & \@grado & \@celdaverde{PERIODO} & \@periodo\\ \hline
+      \@celdaverde{TALLER} & \multicolumn{3}{l|}{#1 · #2} & \@celdaverde{TRABAJO} & #4\\ \hline
+      \@celdaverde{NOMBRE(S)} & \multicolumn{3}{l|}{} & \@celdaverde{FECHA} & \\ \hline
+    \end{tabularx}\arrayrulecolor{black}}\par\vspace{8pt}}
+  % Franjas de sección del programa, con el título en sans.
+  \let\pl@seccion\seccion
+  \renewcommand{\seccion}[2]{{\fuentetitulos\pl@seccion{#1}{#2}}}
+  % Título directo («menos es más»): «Taller: tema» y, si hace falta, una indicación corta.
+  %   \titulotaller{tema}{indicación (opcional, puede ir vacía)}
+  \newcommand{\titulotaller}[2]{\par\vspace{2pt}{\centering
+    {\fuentetitulos\bfseries\large Taller: #1}\par
+    \ifblank{#2}{}{\vspace{2pt}#2\par}}\vspace{4pt}}
+  % Texto citado como el «contexto» de las evaluaciones: fondo gris muy claro, barra verde a la
+  % izquierda (2,5 pt), esquinas rectas; rótulo en negrita y referencia al pie.
+  \definecolor{fondotexto}{HTML}{F7F8FA}
+  \definecolor{barratexto}{HTML}{166534}
+  \renewcommand{\texto}[3]{\par\vspace{4pt}
+    \begin{tcolorbox}[enhanced,colback=fondotexto,colframe=barratexto,boxrule=0pt,
+      leftrule=2.5pt,arc=0pt,outer arc=0pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
+      before skip=2pt,after skip=4pt]
+      \ifblank{#1}{}{{\fuentetitulos\small\bfseries #1}\par\vspace{2pt}}#2\par\vspace{2pt}
+      {\raggedleft\footnotesize #3\par}
+    \end{tcolorbox}}
+  % Explicación breve para resolver sin depender de la memoria (mismo recuadro, sin referencia):
+  %   \recuerda{texto}   o   \recuerda[Título]{texto}
+  \NewDocumentCommand{\recuerda}{O{Para recordar} +m}{\par\vspace{3pt}
+    \begin{tcolorbox}[enhanced,colback=fondotexto,colframe=barratexto,boxrule=0pt,
+      leftrule=2.5pt,arc=0pt,outer arc=0pt,left=6pt,right=6pt,top=3pt,bottom=3pt,
+      before skip=2pt,after skip=4pt,fontupper=\small]
+      {\fuentetitulos\small\bfseries #1}\par\vspace{1pt}#2
+    \end{tcolorbox}}
+  \renewcommand{\fuente}[2]{\texto{}{\itshape #1}{#2}}
+  \renewcommand{\habla}[2]{\item[]{\fuentetitulos\small\bfseries\color{pinotexto}#1:}\ #2}
+  \renewcommand{\concepto}[2]{\par\vspace{2pt}\noindent{\fuentetitulos\small\bfseries\color{pinotexto}#1.}\enspace #2\par\vspace{2pt}}
+  % Recurso: QR y rótulo en negrita.
+  \renewcommand{\recurso}[4]{\par\vspace{3pt}\noindent
+    \begin{minipage}[c]{1.75cm}\ifblank{#4}{\fbox{\parbox[c][1.45cm][c]{1.45cm}{\centering\tiny QR\\pendiente}}}%
+      {\qrcode[height=1.3cm]{#4}}\end{minipage}%
+    \begin{minipage}[c]{\dimexpr\linewidth-1.75cm\relax}%
+      {\fuentetitulos\footnotesize\bfseries #1:}\enspace\textbf{#2}\par\vspace{1pt}#3\end{minipage}\par\vspace{4pt}}
+  % Respuesta de una IA: como una impresión de pantalla (marco gris fino, letra monoespaciada).
+  \renewcommand{\respuestaia}[1]{\par\vspace{4pt}\noindent
+    {\setlength{\fboxsep}{5pt}\setlength{\fboxrule}{0.5pt}\fcolorbox{black!45}{white}{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{%
+      {\fuentetitulos\scriptsize\bfseries Asistente de IA}\par\vspace{2pt}
+      {\RaggedRight\ttfamily\small #1\par}}}}\par\vspace{4pt}}
+  \newcounter{pl@reto}
+  % Puntos del taller numerados (1., 2., 3.…), con tiempo y puntaje a la derecha. Los puntajes
+  % de todos los puntos suman 5,0: así la suma es la nota (escala de 0 a 5).
+  %   \reto{0}{título}{tiempo}{puntos} — el tiempo NO se imprime (mostrarlo puede jugarle en
+  %   contra al docente); queda en el .tex para planear la hora.
+  % Pasos sin tiempo impreso.
+  \renewcommand{\paso}[2]{\stepcounter{pl@paso}\item[\bfseries\arabic{pl@paso}.] #2}
+  \renewcommand{\reto}[4]{\par\needspace{7\baselineskip}\vspace{7pt}\stepcounter{pl@reto}\setcounter{pl@tarea}{0}\noindent
+    {\fuentetitulos\bfseries\arabic{pl@reto}.\enspace #2}%
+    \hfill{\fuentetitulos\scriptsize\ifblank{#4}{}{\textbf{#4 pts}}}%
+    \par\nopagebreak\vspace{2pt}}
+  % Apartado sin número (p. ej. «Cómo se valora»): \apartado{título}
+  \newcommand{\apartado}[1]{\par\needspace{5\baselineskip}\vspace{7pt}\noindent
+    {\fuentetitulos\bfseries\color{pinooscuro}#1}\par\nopagebreak\vspace{2pt}}
+  % Lo que los estudiantes deben hacer, siempre numerado por punto (2.1, 2.2…), con el lugar
+  % donde se resuelve dicho explícitamente (en esta hoja, en el cuaderno, en una hoja aparte):
+  %   \begin{tareas} \tarea{\enlahoja escriban…} \tarea{\encuaderno copien…} \end{tareas}
+  \newcounter{pl@tarea}
+  \newenvironment{tareas}{\par\vspace{1pt}\begin{list}{}{\leftmargin=2.3em\labelwidth=1.9em\labelsep=0.4em
+    \itemsep=1.5pt\topsep=1pt\parsep=0pt}}{\end{list}\vspace{1pt}}
+  \newcommand{\tarea}[1]{\stepcounter{pl@tarea}\item[{\fuentetitulos\small\bfseries\color{pinooscuro}\arabic{pl@reto}.\arabic{pl@tarea}}]#1}
+  \newcommand{\enlahoja}{\textbf{En esta hoja,} }
+  \newcommand{\encuaderno}{\textbf{En el cuaderno,} }
+  \newcommand{\enhojaaparte}{\textbf{En una hoja aparte,} }
+  \newcommand{\envozalta}{\textbf{En voz alta,} }
+  % Pista (al derecho), en letra pequeña: \pista{texto}
+  \renewcommand{\pista}[1]{\par\vspace{2pt}\noindent{\footnotesize\textbf{Pista:} #1}\par\vspace{2pt}}
+  % Diagramas: nodos con el verde claro y borde pino, sin sombras.
+  \tikzset{nodo/.style={draw=pino,fill=verdeclaro,inner sep=3pt,font=\small,align=center,text width=#1},
+    nodovacio/.style={draw=pino,densely dashed,fill=white,inner sep=3pt,font=\small\bfseries,
+      minimum width=1.8cm,minimum height=7mm,align=center}}
+  % Títulos de columna en sans.
+  \renewcommand{\tit}[1]{\leavevmode\color{pinotexto}\fuentetitulos\bfseries\footnotesize #1}
+\fi
+
+% ---------- Marca de la versión del docente ----------------------------------------------
+\if@docente
+  \let\pl@nombreformato\@nombreformato
+  \renewcommand{\@nombreformato}{\pl@nombreformato\ · VERSIÓN DEL DOCENTE}
+  \AtBeginDocument{\ifdefined\SetWatermarkText\SetWatermarkText{DOCENTE}\fi}
+\fi
+\endinput
